@@ -3,1090 +3,1021 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dibyendu Ghosh — Robotics & AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet">
+<title>Dibyendu Ghosh — Robotics & AI Researcher</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lato:wght@300;400;700&family=Inconsolata:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --surface2: #16161f;
-    --border: #22222e;
-    --accent: #00e5ff;
-    --accent2: #7b61ff;
-    --accent3: #ff6b35;
-    --text: #e8e8f0;
-    --text-muted: #6b6b80;
-    --text-dim: #3a3a50;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* Custom cursor */
-  .cursor {
-    position: fixed;
-    width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.1s;
-    mix-blend-mode: difference;
-  }
-  .cursor-ring {
-    position: fixed;
-    width: 32px; height: 32px;
-    border: 1px solid var(--accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transition: all 0.15s ease;
-    opacity: 0.5;
-  }
-
-  /* Noise texture overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.3;
-  }
-
-  /* Grid background */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 60px 60px;
-    opacity: 0.3;
-    pointer-events: none;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 20px 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    backdrop-filter: blur(20px);
-    background: rgba(10,10,15,0.7);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .nav-logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 18px;
-    letter-spacing: -0.5px;
-    color: var(--text);
-  }
-  .nav-logo span { color: var(--accent); }
-
-  .nav-links {
-    display: flex;
-    gap: 36px;
-    list-style: none;
-  }
-  .nav-links a {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--text-muted);
-    text-decoration: none;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--accent); }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding: 120px 48px 80px;
-    gap: 80px;
-    position: relative;
-  }
-
-  .hero-left { position: relative; }
-
-  .hero-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .hero-tag::before {
-    content: '';
-    display: block;
-    width: 24px;
-    height: 1px;
-    background: var(--accent);
-  }
-
-  .hero h1 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: clamp(48px, 6vw, 80px);
-    line-height: 1.0;
-    letter-spacing: -2px;
-    margin-bottom: 16px;
-  }
-
-  .hero h1 .name-line {
-    display: block;
-    background: linear-gradient(135deg, #fff 0%, #a0a0c0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero h1 .accent-line {
-    display: block;
-    color: var(--accent);
-    -webkit-text-fill-color: var(--accent);
-  }
-
-  .hero-subtitle {
-    font-size: 16px;
-    color: var(--text-muted);
-    line-height: 1.7;
-    margin-bottom: 40px;
-    max-width: 440px;
-    font-weight: 300;
-  }
-
-  .hero-subtitle strong { color: var(--text); font-weight: 400; }
-
-  .hero-ctas {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 14px 28px;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    text-decoration: none;
-    font-weight: 400;
-    transition: all 0.2s;
-    position: relative;
-    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-  }
-  .btn-primary:hover {
-    background: #fff;
-    transform: translateY(-2px);
-  }
-
-  .btn-secondary {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 14px 28px;
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .btn-secondary:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  /* Stats row */
-  .hero-stats {
-    display: flex;
-    gap: 40px;
-    margin-top: 56px;
-    padding-top: 40px;
-    border-top: 1px solid var(--border);
-  }
-
-  .stat-item {}
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 32px;
-    font-weight: 800;
-    color: var(--accent);
-    line-height: 1;
-  }
-  .stat-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 4px;
-  }
-
-  /* Hero right — animated robot/circuit visual */
-  .hero-right {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .orbit-system {
-    position: relative;
-    width: 400px;
-    height: 400px;
-  }
-
-  .orbit-center {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100px;
-    height: 100px;
-    border: 2px solid var(--accent);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--surface2);
-    box-shadow: 0 0 40px rgba(0,229,255,0.2), inset 0 0 20px rgba(0,229,255,0.05);
-  }
-
-  .orbit-center-text {
-    font-family: 'Syne', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--accent);
-    text-align: center;
-    letter-spacing: 0.05em;
-  }
-
-  .orbit-ring {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    animation: rotate linear infinite;
-  }
-
-  .orbit-ring:nth-child(2) { width: 180px; height: 180px; animation-duration: 8s; border-color: rgba(0,229,255,0.3); }
-  .orbit-ring:nth-child(3) { width: 280px; height: 280px; animation-duration: 14s; animation-direction: reverse; }
-  .orbit-ring:nth-child(4) { width: 380px; height: 380px; animation-duration: 20s; border-color: rgba(123,97,255,0.2); }
-
-  .orbit-dot {
-    position: absolute;
-    top: -4px; left: 50%;
-    transform: translateX(-50%);
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 10px var(--accent);
-  }
-
-  .orbit-dot-2 {
-    position: absolute;
-    top: 50%; right: -4px;
-    transform: translateY(-50%);
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--accent2);
-    box-shadow: 0 0 10px var(--accent2);
-  }
-
-  .orbit-dot-3 {
-    position: absolute;
-    bottom: -5px; left: 50%;
-    transform: translateX(-50%);
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--accent3);
-    box-shadow: 0 0 12px var(--accent3);
-  }
-
-  .orbit-label {
-    position: absolute;
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    color: var(--text-muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  @keyframes rotate {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-  }
-
-  /* Floating tech badges */
-  .tech-badge {
-    position: absolute;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-    padding: 6px 12px;
-    background: var(--surface);
-    letter-spacing: 0.05em;
-    animation: float ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-
-  .badge-slam { top: 30px; left: -20px; animation-duration: 3.2s; }
-  .badge-rl { top: 80px; right: -40px; animation-duration: 4.1s; animation-delay: 0.5s; }
-  .badge-llm { bottom: 60px; left: -30px; animation-duration: 3.7s; animation-delay: 1s; }
-  .badge-vision { bottom: 20px; right: -20px; animation-duration: 4.5s; animation-delay: 0.3s; }
-
-  /* SECTION SHARED */
-  section {
-    padding: 100px 48px;
-    position: relative;
-  }
-
-  .section-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-tag::before {
-    content: '';
-    display: block;
-    width: 24px; height: 1px;
-    background: var(--accent);
-  }
-
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(32px, 4vw, 52px);
-    font-weight: 800;
-    letter-spacing: -1.5px;
-    margin-bottom: 60px;
-    line-height: 1.05;
-  }
-
-  /* ABOUT */
-  #about {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-  }
-
-  .about-text p {
-    font-size: 16px;
-    color: var(--text-muted);
-    line-height: 1.8;
-    margin-bottom: 20px;
-    font-weight: 300;
-  }
-  .about-text p strong { color: var(--text); font-weight: 400; }
-
-  .expertise-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .expertise-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 20px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .expertise-item:hover {
-    border-color: var(--accent);
-    transform: translateX(8px);
-  }
-
-  .expertise-icon {
-    font-size: 20px;
-    width: 40px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-
-  .expertise-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .expertise-desc {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-top: 2px;
-    letter-spacing: 0.03em;
-  }
-
-  /* EXPERIENCE TIMELINE */
-  #experience { background: var(--bg); }
-
-  .timeline {
-    position: relative;
-    padding-left: 40px;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 8px;
-    bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
-  }
-
-  .timeline-item {
-    position: relative;
-    margin-bottom: 48px;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 0.5s ease;
-  }
-
-  .timeline-item.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  .timeline-dot {
-    position: absolute;
-    left: -44px;
-    top: 8px;
-    width: 9px; height: 9px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 10px var(--accent);
-  }
-
-  .timeline-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-  }
-
-  .timeline-role {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text);
-    flex: 1;
-  }
-
-  .timeline-period {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-    padding: 4px 10px;
-    border: 1px solid rgba(0,229,255,0.3);
-    white-space: nowrap;
-    align-self: flex-start;
-  }
-
-  .timeline-company {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.05em;
-    margin-bottom: 10px;
-  }
-
-  .timeline-desc {
-    font-size: 14px;
-    color: var(--text-muted);
-    line-height: 1.7;
-    font-weight: 300;
-    max-width: 680px;
-  }
-
-  /* PATENTS */
-  #patents {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .patents-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
-  }
-
-  .patent-card {
-    border: 1px solid var(--border);
-    padding: 24px;
-    background: var(--bg);
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .patent-card:hover {
-    border-color: var(--accent2);
-    transform: translateY(-4px);
-  }
-  .patent-card::before {
-    content: attr(data-num);
-    position: absolute;
-    top: -10px; right: 20px;
-    font-family: 'Syne', sans-serif;
-    font-size: 80px;
-    font-weight: 800;
-    color: var(--text-dim);
-    line-height: 1;
-  }
-
-  .patent-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--accent2);
-    letter-spacing: 0.08em;
-    margin-bottom: 10px;
-  }
-
-  .patent-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.4;
-  }
-
-  /* PUBLICATIONS */
-  #publications { background: var(--bg); }
-
-  .pub-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    max-width: 900px;
-  }
-
-  .pub-item {
-    display: grid;
-    grid-template-columns: 60px 1fr;
-    gap: 20px;
-    padding: 20px 24px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    transition: border-color 0.2s;
-  }
-  .pub-item:hover { border-color: var(--accent); }
-
-  .pub-year {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--accent);
-    padding-top: 2px;
-  }
-
-  .pub-venue {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--accent3);
-    letter-spacing: 0.08em;
-    margin-bottom: 4px;
-  }
-
-  .pub-title {
-    font-size: 14px;
-    color: var(--text);
-    line-height: 1.5;
-  }
-
-  /* CONTACT */
-  #contact {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  #contact::before {
-    content: 'CONNECT';
-    position: absolute;
-    bottom: -40px; left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Syne', sans-serif;
-    font-size: 200px;
-    font-weight: 800;
-    color: var(--text-dim);
-    letter-spacing: -8px;
-    white-space: nowrap;
-    pointer-events: none;
-  }
-
-  .contact-intro {
-    font-size: 18px;
-    color: var(--text-muted);
-    max-width: 540px;
-    margin: 0 auto 48px;
-    line-height: 1.7;
-    font-weight: 300;
-  }
-
-  .contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
-  }
-
-  .contact-link {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 14px 28px;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .contact-link:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(0,229,255,0.05);
-  }
-
-  /* FOOTER */
-  footer {
-    padding: 24px 48px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .footer-copy {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 0.05em;
-  }
-
-  /* Animations */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s ease;
-  }
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Responsive */
-  @media (max-width: 900px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 40px; }
-    .hero-right { display: none; }
-    section { padding: 70px 24px; }
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .hero-stats { gap: 24px; flex-wrap: wrap; }
-    footer { flex-direction: column; gap: 12px; text-align: center; }
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+:root {
+  --white: #ffffff;
+  --off-white: #f7f5f0;
+  --light: #efefea;
+  --mid: #c8c4b8;
+  --dark: #2a2824;
+  --ink: #1a1815;
+  --accent: #c0392b;
+  --accent-light: #f5ebe9;
+  --gold: #b8960c;
+  --border: #e0ddd6;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--white);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  background: var(--ink);
+  color: var(--mid);
+  font-family: 'Inconsolata', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 10px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.topbar a { color: var(--mid); text-decoration: none; }
+.topbar a:hover { color: white; }
+.topbar-links { display: flex; gap: 28px; }
+
+/* ── NAV ── */
+nav {
+  border-bottom: 2px solid var(--ink);
+  padding: 0 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 100;
+}
+.nav-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  padding: 18px 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-name span { color: var(--accent); }
+.nav-links {
+  display: flex;
+  gap: 0;
+  list-style: none;
+}
+.nav-links li a {
+  display: block;
+  padding: 22px 20px;
+  font-family: 'Inconsolata', monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dark);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+.nav-links li a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── HERO ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  min-height: 88vh;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-content {
+  padding: 80px 60px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+}
+
+.hero-eyebrow {
+  font-family: 'Inconsolata', monospace;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  max-width: 80px;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 7vw, 96px);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -3px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-title-line {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--dark);
+  margin-bottom: 36px;
+  letter-spacing: -0.3px;
+}
+
+.hero-bio {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #555;
+  font-weight: 300;
+  max-width: 580px;
+  margin-bottom: 48px;
+}
+.hero-bio strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.hero-metrics {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  width: fit-content;
+}
+.metric {
+  padding: 20px 32px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.metric:last-child { border-right: none; }
+.metric-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 1;
+  display: block;
+}
+.metric-num sup {
+  font-size: 20px;
+  color: var(--accent);
+}
+.metric-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-top: 6px;
+  display: block;
+}
+
+/* Hero sidebar */
+.hero-sidebar {
+  background: var(--off-white);
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.sidebar-section-title {
+  font-family: 'Inconsolata', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.current-role {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  padding: 20px;
+}
+.role-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.role-org {
+  font-family: 'Inconsolata', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+}
+.role-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag {
+  font-family: 'Inconsolata', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid var(--border);
+  color: var(--dark);
+  transition: all 0.2s;
+}
+.tag:hover {
+  background: var(--ink);
+  color: white;
+  border-color: var(--ink);
+}
+
+.awards-mini { display: flex; flex-direction: column; gap: 10px; }
+.award-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+}
+.award-year {
+  font-family: 'Inconsolata', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── SECTIONS ── */
+section { padding: 80px 60px; }
+section:nth-child(even) { background: var(--off-white); }
+
+.section-header {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+  margin-bottom: 60px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--ink);
+  align-items: end;
+}
+.section-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 100px;
+  font-weight: 900;
+  color: var(--light);
+  line-height: 1;
+  letter-spacing: -4px;
+}
+.section-meta { padding-bottom: 8px; }
+.section-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+/* ── EXPERIENCE ── */
+.exp-grid { display: flex; flex-direction: column; gap: 0; }
+
+.exp-item {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+  padding: 36px 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.exp-item:hover { background: var(--accent-light); margin: 0 -60px; padding: 36px 60px; }
+.exp-item:last-child { border-bottom: none; }
+
+.exp-meta {}
+.exp-period {
+  font-family: 'Inconsolata', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.exp-company {
+  font-size: 13px;
+  color: #888;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.exp-role {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+.exp-desc {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.75;
+  font-weight: 300;
+  max-width: 640px;
+}
+.exp-tags { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+.exp-tag {
+  font-family: 'Inconsolata', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  background: var(--light);
+  color: var(--dark);
+  text-transform: uppercase;
+}
+
+/* ── PATENTS ── */
+.patents-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.patent-item {
+  background: white;
+  padding: 32px;
+  position: relative;
+  transition: background 0.2s;
+}
+.patent-item:hover { background: var(--ink); }
+.patent-item:hover .patent-title { color: white; }
+.patent-item:hover .patent-id { color: var(--accent); }
+.patent-item:hover .patent-type { border-color: #555; color: #888; }
+
+.patent-idx {
+  font-family: 'Playfair Display', serif;
+  font-size: 64px;
+  font-weight: 900;
+  color: var(--light);
+  line-height: 1;
+  margin-bottom: 12px;
+  transition: color 0.2s;
+}
+.patent-item:hover .patent-idx { color: #333; }
+
+.patent-id {
+  font-family: 'Inconsolata', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.patent-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 12px;
+  transition: color 0.2s;
+}
+.patent-type {
+  font-family: 'Inconsolata', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+/* ── PUBLICATIONS ── */
+.pub-list { display: flex; flex-direction: column; gap: 0; }
+.pub-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 140px;
+  gap: 32px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+  transition: background 0.2s;
+}
+.pub-item:hover { background: var(--accent-light); margin: 0 -60px; padding: 28px 60px; }
+.pub-item:last-child { border-bottom: none; }
+
+.pub-year {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--light);
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+.pub-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.45;
+  margin-bottom: 6px;
+}
+.pub-authors {
+  font-size: 13px;
+  color: #888;
+  font-weight: 300;
+  line-height: 1.5;
+}
+.pub-venue {
+  font-family: 'Inconsolata', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  text-align: right;
+  line-height: 1.5;
+}
+.pub-award {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 10px;
+  background: var(--gold);
+  color: white;
+  padding: 2px 8px;
+  letter-spacing: 0.05em;
+}
+
+/* ── CONTACT ── */
+#contact {
+  background: var(--ink);
+  color: white;
+}
+#contact .section-num { color: #2a2824; }
+#contact .section-label { color: var(--accent); }
+#contact .section-title { color: white; }
+#contact .section-header { border-bottom-color: #333; }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.contact-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-style: italic;
+  color: #aaa;
+  line-height: 1.6;
+  font-weight: 400;
+}
+.contact-text strong { color: white; font-style: normal; font-weight: 700; }
+
+.contact-items { display: flex; flex-direction: column; gap: 0; }
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid #333;
+  text-decoration: none;
+  transition: all 0.2s;
+  color: #aaa;
+}
+.contact-item:hover { color: white; padding-left: 12px; }
+.contact-item:last-child { border-bottom: none; }
+.contact-icon {
+  width: 40px; height: 40px;
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.contact-item:hover .contact-icon { border-color: var(--accent); background: var(--accent); }
+.contact-item:hover .contact-icon svg { stroke: white; }
+.contact-label {
+  font-family: 'Inconsolata', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 3px;
+}
+.contact-value {
+  font-size: 15px;
+  color: inherit;
+  font-weight: 300;
+}
+
+/* Footer */
+footer {
+  background: #111;
+  padding: 24px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #222;
+}
+.footer-text {
+  font-family: 'Inconsolata', monospace;
+  font-size: 11px;
+  color: #444;
+  letter-spacing: 0.08em;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .topbar, nav, section, footer { padding-left: 24px; padding-right: 24px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-sidebar { display: none; }
+  .hero-content { padding: 60px 24px; }
+  .section-header { grid-template-columns: 1fr; gap: 8px; }
+  .section-num { font-size: 60px; }
+  .exp-item { grid-template-columns: 1fr; gap: 8px; }
+  .pub-item { grid-template-columns: 60px 1fr; }
+  .pub-venue { display: none; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-metrics { flex-wrap: wrap; }
+  .patents-layout { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <span>IIT Kharagpur PhD · Bengaluru, India</span>
+  <div class="topbar-links">
+    <a href="https://scholar.google.co.in/citations?user=TJO5YNkAAAAJ" target="_blank">Google Scholar</a>
+    <a href="https://www.linkedin.com/in/dibyendu-ghosh-97978213" target="_blank">LinkedIn</a>
+    <a href="mailto:dibyendu35@gmail.com">dibyendu35@gmail.com</a>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">DG<span>.</span></div>
+  <a class="nav-name" href="#home">Dibyendu <span>Ghosh</span></a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
     <li><a href="#patents">Patents</a></li>
-    <li><a href="#publications">Research</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-left">
-    <div class="hero-tag">Robotics · AI · Autonomous Systems</div>
-    <h1>
-      <span class="name-line">Dibyendu</span>
-      <span class="name-line">Ghosh</span>
-      <span class="accent-line">PhD</span>
-    </h1>
-    <p class="hero-subtitle">
-      VP Robotics at Rekise Marine · IIT Kharagpur · <strong>12 years</strong> building autonomous systems at Intel, Samsung & Ola. Pushing the boundary of <strong>robots that truly navigate the real world</strong>.
+<div class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Robotics · Autonomous Systems · AI</div>
+    <h1>Dibyendu<br><em>Ghosh</em></h1>
+    <div class="hero-title-line">Robotics Researcher · Builder · IIT Kharagpur PhD</div>
+    <p class="hero-bio">
+      PhD from <strong>IIT Kharagpur</strong> in Computer Vision & Robotics. Twelve years building autonomous systems that work in the real world — underground mines, city roads, factory floors, open ocean. Research Scientist at <strong>Intel Labs</strong>, Research Lead at <strong>Samsung R&D</strong>, Associate Director at <strong>Ola Electric</strong>. Seven US patents. Reviewer at ICRA and IROS.
     </p>
-    <div class="hero-ctas">
-      <a href="#contact" class="btn-primary">Get in Touch</a>
-      <a href="#publications" class="btn-secondary">View Research</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num">7</div>
-        <div class="stat-label">US Patents</div>
+    <div class="hero-metrics">
+      <div class="metric">
+        <span class="metric-num">7</span>
+        <span class="metric-label">US Patents</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">25+</div>
-        <div class="stat-label">Publications</div>
+      <div class="metric">
+        <span class="metric-num">25<sup>+</sup></span>
+        <span class="metric-label">Publications</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">12</div>
-        <div class="stat-label">Yrs Post-PhD</div>
+      <div class="metric">
+        <span class="metric-num">12</span>
+        <span class="metric-label">Yrs Post-PhD</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">30+</div>
-        <div class="stat-label">Engineers Led</div>
+      <div class="metric">
+        <span class="metric-num">30<sup>+</sup></span>
+        <span class="metric-label">Engineers Led</span>
       </div>
     </div>
   </div>
 
-  <div class="hero-right">
-    <div class="orbit-system">
-      <div class="tech-badge badge-slam">SLAM / vSLAM</div>
-      <div class="tech-badge badge-rl">Reinforcement Learning</div>
-      <div class="tech-badge badge-llm">LLM Embodied AI</div>
-      <div class="tech-badge badge-vision">3D Computer Vision</div>
-
-      <div class="orbit-ring">
-        <div class="orbit-dot"></div>
-      </div>
-      <div class="orbit-ring">
-        <div class="orbit-dot-2"></div>
-      </div>
-      <div class="orbit-ring">
-        <div class="orbit-dot-3"></div>
-      </div>
-
-      <div class="orbit-center">
-        <div class="orbit-center-text">ROBOTICS<br>&<br>AI</div>
+  <div class="hero-sidebar">
+    <div>
+      <div class="sidebar-section-title">Current Position</div>
+      <div class="current-role">
+        <div class="role-title">Vice President — Robotics</div>
+        <div class="role-org">Rekise Marine · 2025 – Present</div>
+        <div class="role-desc">Leading autonomous navigation for marine robots. Real-time path planning, sensor fusion, and mission execution for USV/UUV platforms in open-water deployments.</div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-tag">Background</div>
-  <h2 class="section-title">Building Machines<br>That Think & Move</h2>
-  <div class="about-grid">
-    <div class="about-text fade-in">
-      <p>I am a robotics researcher and engineer with a <strong>PhD from IIT Kharagpur</strong> in Computer Vision and Robotics. Over 12 years, I've shipped autonomous systems across underground mines, city roads, factory floors, and open ocean — at scale, in the real world.</p>
-      <p>From founding the <strong>AGV Research Group at IIT KGP</strong> to leading perception teams at Intel Labs, Samsung R&D, and Ola Electric, I've always been at the intersection of deep research and deployable product.</p>
-      <p>Today, as <strong>VP Robotics at Rekise Marine</strong>, I'm building the next generation of autonomous marine vehicles — and thinking hard about what comes next.</p>
+    <div>
+      <div class="sidebar-section-title">Technical Expertise</div>
+      <div class="skill-tags">
+        <span class="tag">SLAM / vSLAM</span>
+        <span class="tag">3D Computer Vision</span>
+        <span class="tag">Reinforcement Learning</span>
+        <span class="tag">Multi-Robot Systems</span>
+        <span class="tag">LLM Embodied AI</span>
+        <span class="tag">Event Cameras</span>
+        <span class="tag">Sensor Fusion</span>
+        <span class="tag">Path Planning</span>
+        <span class="tag">Marine Robotics</span>
+        <span class="tag">Autonomous Vehicles</span>
+      </div>
     </div>
-    <div class="expertise-list fade-in">
-      <div class="expertise-item">
-        <div class="expertise-icon">🤖</div>
-        <div>
-          <div class="expertise-name">Autonomous Navigation</div>
-          <div class="expertise-desc">SLAM · Path Planning · Multi-Sensor Fusion</div>
+
+    <div>
+      <div class="sidebar-section-title">Recent Awards</div>
+      <div class="awards-mini">
+        <div class="award-item">
+          <span class="award-year">'23</span>
+          <span>Best Paper — IEEE CONECCT (Robotics & Smart Systems)</span>
         </div>
-      </div>
-      <div class="expertise-item">
-        <div class="expertise-icon">👁️</div>
-        <div>
-          <div class="expertise-name">3D Computer Vision</div>
-          <div class="expertise-desc">Event Cameras · BEV · Visual Odometry</div>
+        <div class="award-item">
+          <span class="award-year">'22</span>
+          <span>Best Paper — IEEE CIS (Image Processing & CV)</span>
         </div>
-      </div>
-      <div class="expertise-item">
-        <div class="expertise-icon">🧠</div>
-        <div>
-          <div class="expertise-name">Embodied AI</div>
-          <div class="expertise-desc">Reinforcement Learning · LLM · VLMaps</div>
+        <div class="award-item">
+          <span class="award-year">'21</span>
+          <span>Best Paper — IEEE CONECCT (Robotics)</span>
         </div>
-      </div>
-      <div class="expertise-item">
-        <div class="expertise-icon">🌊</div>
-        <div>
-          <div class="expertise-name">Marine Robotics</div>
-          <div class="expertise-desc">USV · UUV · Autonomous Mission Execution</div>
+        <div class="award-item">
+          <span class="award-year">'20</span>
+          <span>Nominee, Gordy Award — Intel Labs' highest honour</span>
         </div>
-      </div>
-      <div class="expertise-item">
-        <div class="expertise-icon">🚁</div>
-        <div>
-          <div class="expertise-name">Multi-Robot Systems</div>
-          <div class="expertise-desc">Swarm · Ground & Drone · Coordination</div>
+        <div class="award-item">
+          <span class="award-year">'19</span>
+          <span>Outstanding Employee — Intel Lab, BDL</span>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <!-- EXPERIENCE -->
 <section id="experience">
-  <div class="section-tag">Career</div>
-  <h2 class="section-title">12 Years,<br>Real Systems</h2>
-  <div class="timeline">
+  <div class="section-header reveal">
+    <div class="section-num">01</div>
+    <div class="section-meta">
+      <div class="section-label">Career</div>
+      <div class="section-title">12 Years,<br>Real Systems</div>
+    </div>
+  </div>
 
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-header">
-        <div class="timeline-role">Vice President — Robotics</div>
-        <div class="timeline-period">2025 — Present</div>
+  <div class="exp-grid">
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">2025 – Present</div>
+        <div class="exp-company">Rekise Marine</div>
       </div>
-      <div class="timeline-company">Rekise Marine</div>
-      <div class="timeline-desc">Leading autonomous navigation systems for marine robots — real-time path planning, obstacle avoidance, and mission execution in dynamic open-water environments. Defining the technical roadmap for USV/UUV platforms.</div>
+      <div>
+        <div class="exp-role">Vice President — Robotics</div>
+        <div class="exp-desc">Leading autonomous navigation for marine robots — real-time path planning, obstacle avoidance, and mission execution in dynamic open-water environments. Defining the technical roadmap for USV/UUV platforms, integrating sensor fusion, state estimation, and adaptive control.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Marine Robotics</span>
+          <span class="exp-tag">USV / UUV</span>
+          <span class="exp-tag">Sensor Fusion</span>
+        </div>
+      </div>
     </div>
 
-    <div class="timeline-item">
-      <div class="timeline-dot" style="background: var(--accent2); box-shadow: 0 0 10px var(--accent2)"></div>
-      <div class="timeline-header">
-        <div class="timeline-role">Associate Director — Perception</div>
-        <div class="timeline-period">2023 — 2025</div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">2023 – 2025</div>
+        <div class="exp-company">Ola Electric</div>
       </div>
-      <div class="timeline-company">Ola Electric</div>
-      <div class="timeline-desc">Spearheaded perception for AVs, robotics, and two-wheelers. Led 7 research engineers on end-to-end data-driven navigation, multi-camera BEV generation, SLAM, and two-wheeler ADAS (FCW, ACC).</div>
+      <div>
+        <div class="exp-role">Associate Director — Perception</div>
+        <div class="exp-desc">Spearheaded the perception team for Autonomous Vehicles, Robotics, and Two-wheeler projects, leading 7 research engineers. End-to-end data-driven navigation, multi-camera BEV generation, SLAM, and a full two-wheeler ADAS stack with FCW and Adaptive Cruise Control.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Autonomous Vehicles</span>
+          <span class="exp-tag">BEV Generation</span>
+          <span class="exp-tag">LLM Embodied AI</span>
+        </div>
+      </div>
     </div>
 
-    <div class="timeline-item">
-      <div class="timeline-dot" style="background: var(--accent3); box-shadow: 0 0 10px var(--accent3)"></div>
-      <div class="timeline-header">
-        <div class="timeline-role">Research Lead</div>
-        <div class="timeline-period">2022 — 2023</div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">2022 – 2023</div>
+        <div class="exp-company">Samsung R&D Institute</div>
       </div>
-      <div class="timeline-company">Samsung R&D Institute, Delhi</div>
-      <div class="timeline-desc">Led 16 engineers on robotics, CV, and RL. Built robot re-localization systems, human tracking via LiDAR, deep RL-based coverage path planners, and an RL agent for software memory leak detection.</div>
+      <div>
+        <div class="exp-role">Research Lead</div>
+        <div class="exp-desc">Led 16 engineers across robotics, computer vision, and reinforcement learning. Built robot re-localization via 2D LiDAR, human detection and tracking, deep RL-based coverage path planners, and an RL agent for software memory leak detection in TV applications.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Deep RL</span>
+          <span class="exp-tag">LiDAR</span>
+          <span class="exp-tag">Path Planning</span>
+        </div>
+      </div>
     </div>
 
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-header">
-        <div class="timeline-role">Research Scientist</div>
-        <div class="timeline-period">2016 — 2022</div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">2016 – 2022</div>
+        <div class="exp-company">Intel Labs, Bangalore</div>
       </div>
-      <div class="timeline-company">Intel Labs, Bangalore</div>
-      <div class="timeline-desc">6 years building distributed swarm robotics, multi-robot SLAM, and event camera-based visual odometry (AVIO). Nominee for Gordy Award — Intel Labs' highest honour. Led team of 5 including 2 PhDs.</div>
+      <div>
+        <div class="exp-role">Research Scientist</div>
+        <div class="exp-desc">Six years building distributed swarm robotics, multi-robot SLAM, and event camera-based visual inertial odometry (AVIO). Led a team of 5 including 2 PhD holders. Nominee for the Gordy Award — Intel Labs' highest honour. Published at ICRA, ISSCC, MFI.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Swarm Robotics</span>
+          <span class="exp-tag">Event Cameras</span>
+          <span class="exp-tag">Multi-Robot SLAM</span>
+        </div>
+      </div>
     </div>
 
-    <div class="timeline-item">
-      <div class="timeline-dot" style="background: var(--accent2); box-shadow: 0 0 10px var(--accent2)"></div>
-      <div class="timeline-header">
-        <div class="timeline-role">Senior CV Engineer</div>
-        <div class="timeline-period">2014 — 2016</div>
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">2014 – 2016</div>
+        <div class="exp-company">Uurmi Systems, Hyderabad</div>
       </div>
-      <div class="timeline-company">Uurmi Systems, Hyderabad</div>
-      <div class="timeline-desc">Led a team on autonomous car development — Visual Odometry, SLAM, path planning, multi-sensor fusion, and object tracking in collaboration with a university.</div>
+      <div>
+        <div class="exp-role">Senior Computer Vision Engineer</div>
+        <div class="exp-desc">Led a team of 5 engineers and 4 university students on an autonomous car project. Developed Visual Odometry, SLAM, path planning, multi-sensor fusion, and object tracking in collaboration with a university partner.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">Autonomous Car</span>
+          <span class="exp-tag">Visual Odometry</span>
+          <span class="exp-tag">SLAM</span>
+        </div>
+      </div>
     </div>
 
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">2011 – 2014</div>
+        <div class="exp-company">IIT Kharagpur</div>
+      </div>
+      <div>
+        <div class="exp-role">Founder & Head — AGV Research Group</div>
+        <div class="exp-desc">Founded and led the Autonomous Ground Vehicle Research Group at IIT KGP — a 30-student team from across departments. Designed end-to-end navigation algorithms for the Intelligent Ground Vehicle Competition (IGVC), Michigan, 2012–14.</div>
+        <div class="exp-tags">
+          <span class="exp-tag">AGV</span>
+          <span class="exp-tag">IGVC</span>
+          <span class="exp-tag">Team Leadership</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <div class="section-num">02</div>
+    <div class="section-meta">
+      <div class="section-label">Signature Work</div>
+      <div class="section-title">Key Projects</div>
+    </div>
+  </div>
+
+  <div class="exp-grid">
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Intel Labs</div>
+        <div class="exp-company">2017 – 2019</div>
+      </div>
+      <div>
+        <div class="exp-role">Distributed Autonomous Swarm Robots</div>
+        <div class="exp-desc">Built a fully distributed swarm system where ground robots and drones coordinate autonomously without any central server. Each robot makes local decisions using shared state and dynamic anchor selection. Demonstrated a working PoC and resulted in 5 US patents. Featured at ISSCC 2019 with a custom 22nm CMOS robot SoC.</div>
+        <div class="exp-tags"><span class="exp-tag">Swarm Robotics</span><span class="exp-tag">Multi-Robot</span><span class="exp-tag">22nm SoC</span><span class="exp-tag">ISSCC</span></div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Intel Labs</div>
+        <div class="exp-company">2019 – 2022</div>
+      </div>
+      <div>
+        <div class="exp-role">AVIO — Asynchronous Event-Based Visual Inertial Odometry</div>
+        <div class="exp-desc">Developed a novel visual odometry system using event cameras — neuromorphic sensors that respond to pixel-level brightness changes at microsecond resolution. AVIO fuses asynchronous event streams with IMU data for accurate, low-latency localization in fast-motion and low-light environments where conventional cameras fail. Best Paper Award at IEEE CONECCT 2023.</div>
+        <div class="exp-tags"><span class="exp-tag">Event Cameras</span><span class="exp-tag">Visual Odometry</span><span class="exp-tag">IMU Fusion</span><span class="exp-tag">Best Paper</span></div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Intel Labs</div>
+        <div class="exp-company">2019 – 2021</div>
+      </div>
+      <div>
+        <div class="exp-role">KB-RRT — Kinematic Path Planner for Cluttered Environments</div>
+        <div class="exp-desc">Designed a bi-directional RRT path planning algorithm that respects kinematic constraints of real robots, generating smooth, executable trajectories rather than geometric paths. Extended to PG-RRT using Gaussian Mixture Models for probabilistic environment representation. Published at ICRA 2019 and IROS 2021.</div>
+        <div class="exp-tags"><span class="exp-tag">Path Planning</span><span class="exp-tag">RRT</span><span class="exp-tag">ICRA</span><span class="exp-tag">IROS</span></div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Samsung R&D</div>
+        <div class="exp-company">2022 – 2023</div>
+      </div>
+      <div>
+        <div class="exp-role">Deep RL Coverage Path Planner (Single & Multi-Robot)</div>
+        <div class="exp-desc">Trained deep reinforcement learning agents to solve the coverage path planning problem — ensuring a robot (or team of robots) covers every point in an unknown environment with minimum overlap and energy use. Extended to multi-robot coordination where agents learn to divide territory without explicit communication.</div>
+        <div class="exp-tags"><span class="exp-tag">Deep RL</span><span class="exp-tag">Coverage Planning</span><span class="exp-tag">Multi-Robot</span></div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Ola Electric</div>
+        <div class="exp-company">2023 – 2025</div>
+      </div>
+      <div>
+        <div class="exp-role">Multi-Camera Bird's Eye View (BEV) Generation</div>
+        <div class="exp-desc">Built a multi-camera perception system that fuses feeds from cameras around a two-wheeler or vehicle into a unified top-down (bird's eye view) representation of the surroundings — enabling accurate object detection, lane awareness, and safe navigation for autonomous two-wheelers at scale.</div>
+        <div class="exp-tags"><span class="exp-tag">BEV Perception</span><span class="exp-tag">Multi-Camera</span><span class="exp-tag">ADAS</span><span class="exp-tag">Two-Wheeler</span></div>
+      </div>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-period">IIT Kharagpur</div>
+        <div class="exp-company">2010 – 2014</div>
+      </div>
+      <div>
+        <div class="exp-role">3D Underground Mine Mapping — PhD Research</div>
+        <div class="exp-desc">Designed and built a prototype autonomous mobile robot capable of mapping GPS-denied underground mine environments in 3D using 6D SLAM. Fused data from LiDAR, IMU, and cameras for robust pose estimation in featureless, dust-filled tunnels. Sponsored by ISRO. The foundational work that led to a career in autonomous systems.</div>
+        <div class="exp-tags"><span class="exp-tag">6D SLAM</span><span class="exp-tag">Mine Robotics</span><span class="exp-tag">ISRO</span><span class="exp-tag">PhD Thesis</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- PATENTS -->
 <section id="patents">
-  <div class="section-tag">Intellectual Property</div>
-  <h2 class="section-title">7 US Patents</h2>
-  <div class="patents-grid">
-    <div class="patent-card fade-in" data-num="01">
-      <div class="patent-num">US 20190324479</div>
-      <div class="patent-title">Dynamic Anchor Selection for Swarm Localization</div>
-    </div>
-    <div class="patent-card fade-in" data-num="02">
-      <div class="patent-num">US 20200043348</div>
-      <div class="patent-title">Unmanned Vehicle Positioning & Positioning-Based Methods</div>
-    </div>
-    <div class="patent-card fade-in" data-num="03">
-      <div class="patent-num">US 15/855,123</div>
-      <div class="patent-title">Robot Swarm Propagation Using Virtual Partitions</div>
-    </div>
-    <div class="patent-card fade-in" data-num="04">
-      <div class="patent-num">US 10775774</div>
-      <div class="patent-title">Systems & Methods for Robot Swarm Coordination</div>
-    </div>
-    <div class="patent-card fade-in" data-num="05">
-      <div class="patent-num">US 20200103867</div>
-      <div class="patent-title">Smart Chaining: Distributed Autonomous Swarm Coordination</div>
-    </div>
-    <div class="patent-card fade-in" data-num="06">
-      <div class="patent-num">EP4040247A1</div>
-      <div class="patent-title">Collaboration Between Humans and Autonomous Machines</div>
-    </div>
-    <div class="patent-card fade-in" data-num="07">
-      <div class="patent-num">IN WI-202306-048-1</div>
-      <div class="patent-title">Intelligent Dust Collection for Multi-Robot Vacuum Coordination</div>
+  <div class="section-header reveal">
+    <div class="section-num">03</div>
+    <div class="section-meta">
+      <div class="section-label">Intellectual Property</div>
+      <div class="section-title">7 Patents across<br>US, EU & India</div>
     </div>
   </div>
-</section>
 
-<!-- PUBLICATIONS -->
-<section id="publications">
-  <div class="section-tag">Research</div>
-  <h2 class="section-title">Selected Publications</h2>
-  <div class="pub-list">
-    <div class="pub-item fade-in">
-      <div class="pub-year">2026</div>
-      <div>
-        <div class="pub-venue">Journal of Aerospace Information Systems · AIAA</div>
-        <div class="pub-title">3D PG-RRT: UAV Path Planning Using a Gaussian-Mixture-Model-Driven, Kinematically Constrained RRT</div>
-      </div>
+  <div class="patents-layout reveal">
+    <div class="patent-item">
+      <div class="patent-idx">01</div>
+      <div class="patent-id">US 10775774</div>
+      <span class="patent-type">Granted · Swarm Robotics</span>
     </div>
-    <div class="pub-item fade-in">
-      <div class="pub-year">2025</div>
-      <div>
-        <div class="pub-venue">IEEE ICAR 2025</div>
-        <div class="pub-title">MultiAgent-DeepQ: A Reinforcement Learning Framework for Multi-Agent Exploration in Unknown Environments</div>
-      </div>
+    <div class="patent-item">
+      <div class="patent-idx">02</div>
+      <div class="patent-id">US 20190324479</div>
+      <span class="patent-type">Published · Swarm Localization</span>
     </div>
-    <div class="pub-item fade-in">
-      <div class="pub-year">2025</div>
-      <div>
-        <div class="pub-venue">IEEE ICAR 2025</div>
-        <div class="pub-title">RL-BiRRT: A Reinforcement Learning-Driven Framework for Intelligent Path Planning</div>
-      </div>
+    <div class="patent-item">
+      <div class="patent-idx">03</div>
+      <div class="patent-id">US 20200043348</div>
+      <span class="patent-type">Published · Unmanned Vehicles</span>
     </div>
-    <div class="pub-item fade-in">
-      <div class="pub-year">2023</div>
-      <div>
-        <div class="pub-venue">IEEE CONECCT 2023 · Best Paper Award</div>
-        <div class="pub-title">AeVIO: Asynchronous Event-Based Visual Inertial Odometry</div>
-      </div>
+    <div class="patent-item">
+      <div class="patent-idx">04</div>
+      <div class="patent-id">US 15/855,123</div>
+      <span class="patent-type">Application · Swarm Coordination</span>
     </div>
-    <div class="pub-item fade-in">
-      <div class="pub-year">2021</div>
-      <div>
-        <div class="pub-venue">IROS 2021 · IEEE</div>
-        <div class="pub-title">PG-RRT: A Gaussian Mixture Model Driven, Kinematically Constrained Bi-directional RRT for Robot Path Planning</div>
-      </div>
+    <div class="patent-item">
+      <div class="patent-idx">05</div>
+      <div class="patent-id">US 20200103867</div>
+      <span class="patent-type">Published · Autonomous Coordination</span>
     </div>
-    <div class="pub-item fade-in">
-      <div class="pub-year">2019</div>
-      <div>
-        <div class="pub-venue">ICRA 2019 · IEEE</div>
-        <div class="pub-title">Kinematic Constraints Based Bi-directional RRT (KB-RRT) with Parameterized Trajectories for Robot Path Planning in Cluttered Environment</div>
-      </div>
+    <div class="patent-item">
+      <div class="patent-idx">06</div>
+      <div class="patent-id">EP4040247A1</div>
+      <span class="patent-type">European · Human-Robot</span>
     </div>
-    <div class="pub-item fade-in">
-      <div class="pub-year">2019</div>
-      <div>
-        <div class="pub-venue">ISSCC 2019 · IEEE</div>
-        <div class="pub-title">A Distributed Autonomous and Collaborative Multi-Robot System Featuring a Low-Power Robot SoC in 22nm CMOS</div>
-      </div>
+    <div class="patent-item">
+      <div class="patent-idx">07</div>
+      <div class="patent-id">IN WI-202306-048-1</div>
+      <span class="patent-type">Indian · Multi-Robot</span>
     </div>
+  </div>
+
+  <div style="margin-top:40px;" class="reveal">
+    <a href="https://scholar.google.co.in/citations?user=TJO5YNkAAAAJ" target="_blank" style="font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:2px;">View 25+ research publications on Google Scholar →</a>
   </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-tag">Let's Talk</div>
-  <h2 class="section-title" style="position:relative;z-index:1">Open to<br>Collaboration</h2>
-  <p class="contact-intro">Interested in autonomous systems, deep-tech ventures, research collaboration, or advisory roles? Let's connect.</p>
-  <div class="contact-links">
-    <a href="mailto:dibyendu35@gmail.com" class="contact-link">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-      Email
-    </a>
-    <a href="https://scholar.google.co.in/citations?user=TJO5YNkAAAAJ" target="_blank" class="contact-link">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      Google Scholar
-    </a>
-    <a href="https://www.linkedin.com/in/dibyendu-ghosh-97978213" target="_blank" class="contact-link">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-      LinkedIn
-    </a>
+  <div class="section-header reveal">
+    <div class="section-num">04</div>
+
+    <div class="section-meta">
+      <div class="section-label">Get in Touch</div>
+      <div class="section-title">Open to<br>Collaboration</div>
+    </div>
+  </div>
+
+  <div class="contact-grid">
+    <p class="contact-text reveal">
+      Interested in <strong>autonomous systems</strong>, deep-tech ventures, research collaboration, <strong>advisory roles</strong>, or just a conversation about where robotics is headed.
+    </p>
+    <div class="contact-items reveal">
+      <a href="mailto:dibyendu35@gmail.com" class="contact-item">
+        <div class="contact-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value">dibyendu.agv@gmail.com</div>
+        </div>
+      </a>
+      <a href="https://www.linkedin.com/in/dibyendu-ghosh-97978213" target="_blank" class="contact-item">
+        <div class="contact-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">LinkedIn</div>
+          <div class="contact-value">dibyendu-ghosh-97978213</div>
+        </div>
+      </a>
+      <a href="https://scholar.google.co.in/citations?user=TJO5YNkAAAAJ" target="_blank" class="contact-item">
+        <div class="contact-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Google Scholar</div>
+          <div class="contact-value">View Publications & Citations</div>
+        </div>
+      </a>
+      <a href="https://github.com/dibyenduiitkgp09" target="_blank" class="contact-item">
+        <div class="contact-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">GitHub</div>
+          <div class="contact-value">dibyenduiitkgp09</div>
+        </div>
+      </a>
+    </div>
   </div>
 </section>
 
 <footer>
-  <div class="footer-copy">© 2026 Dibyendu Ghosh. All rights reserved.</div>
-  <div class="footer-copy">IIT Kharagpur PhD · Robotics & AI</div>
+  <div class="footer-text">© 2026 Dibyendu Ghosh. All rights reserved.</div>
+  <div class="footer-text">PhD · IIT Kharagpur · Robotics & Autonomous Systems</div>
 </footer>
 
 <script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx - 4 + 'px';
-    cursor.style.top = my - 4 + 'px';
-  });
-
-  function animRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx - 16 + 'px';
-    ring.style.top = ry - 16 + 'px';
-    requestAnimationFrame(animRing);
-  }
-  animRing();
-
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(3)'; ring.style.opacity = '0'; });
-    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.opacity = '0.5'; });
-  });
-
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) e.target.classList.add('visible');
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.fade-in, .timeline-item').forEach(el => observer.observe(el));
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
