@@ -92,6 +92,7 @@ nav{
 }
 .hero-diagram{width:100%}
 .hero-diagram svg{width:100%;height:auto;display:block}
+.hero-diagram canvas{width:100%;height:auto;display:block}
 .hero-eyebrow{
   font-family:'IBM Plex Mono',monospace;
   font-size:12px;letter-spacing:0.18em;text-transform:uppercase;
@@ -575,137 +576,203 @@ footer{background:var(--ink);padding:28px 0}
 const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on')}),{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-// ─ Hero diagram: distributed policy network coordinating a multi-agent robot fleet ─
+// ─ Hero: 3D layered world — air · ground · surface · subsea, fully connected ─
 (function(){
   const host=document.getElementById('diagram');
   if(!host) return;
-  const NS='http://www.w3.org/2000/svg';
-  const G='#7fd99f', GL='rgba(127,217,159,0.6)', DIM='rgba(127,217,159,0.16)', TXT='#9fb0a3', GOLD='#caa46b', BLUE='#9ec5ff';
+  const cv=document.createElement('canvas');
+  host.appendChild(cv);
+  const ctx=cv.getContext('2d');
 
-  const svg=document.createElementNS(NS,'svg');
-  svg.setAttribute('viewBox','0 0 520 520');
-  svg.setAttribute('role','img');
-  svg.setAttribute('aria-label','Distributed policy network coordinating drones, autonomous cars, surface vessels and underwater vehicles');
-  host.appendChild(svg);
+  const G='127,217,159', GOLD='202,164,107', BLUE='158,197,255', SKY='180,205,225';
 
-  function el(tag,a){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);return e;}
-  function txt(x,y,s,o){o=o||{};const e=el('text',{x,y,fill:o.fill||TXT,'font-family':'IBM Plex Mono, monospace','font-size':o.fs||11,'text-anchor':o.an||'middle','font-weight':o.fw||400});e.textContent=s;return e;}
-  function add(e){svg.appendChild(e);return e;}
+  let W,H,dpr;
+  function resize(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    const rw=host.clientWidth||440;
+    const rh=Math.round(rw*1.05);
+    cv.style.width=rw+'px'; cv.style.height=rh+'px';
+    W=cv.width=rw*dpr; H=cv.height=rh*dpr;
+  }
+  resize();
 
-  const defs=add(el('defs',{}));
+  // world: y = altitude (+ air, 0 = water surface, - subsea). ground sits at y=0 too (land plane)
+  const SPAN=2.6;          // half-width of the world plane
+  const Y_AIR=1.7, Y_GND=0.05, Y_SURF=0.0, Y_SUB=-1.6;
 
-  const CX=260, CY=260;
-
-  // ===== distributed fleet: multiple agents of each type, arranged in a ring =====
-  // type → drawer + colour + short tag
-  const TYPES={
-    drone:{draw:drone, c:G,    tag:'UAV'},
-    car:  {draw:car,   c:GOLD, tag:'UGV'},
-    usv:  {draw:usv,   c:G,    tag:'USV'},
-    auv:  {draw:auv,   c:BLUE, tag:'UUV'}
-  };
-  // 12 agents around the ring, grouped by domain quadrant
-  const ringPlan=[
-    'drone','drone','drone',
-    'car','car','car',
-    'usv','usv','usv',
-    'auv','auv','auv'
+  // agents inhabit layers; positioned across the plane (x,z)
+  function P(x,z,y,type,col){return {x,z,y,type,col,ph:Math.random()*6.28,_y:y};}
+  let agents=[
+    // aerial drones (spread high)
+    P(-1.4, 1.1, Y_AIR, 'drone',G), P(1.3,-0.6,Y_AIR+0.3,'drone',G), P(0.2,1.6,Y_AIR-0.2,'drone',G),
+    // ground vehicles (on land side, z<0)
+    P(-1.6,-1.4,Y_GND,'car',GOLD), P(0.0,-1.7,Y_GND,'car',GOLD), P(1.5,-1.3,Y_GND,'car',GOLD),
+    // surface vessels (on water side, z>0, at surface)
+    P(-1.2,1.5,Y_SURF,'usv',G), P(1.6,1.2,Y_SURF,'usv',G),
+    // underwater vehicles (below surface, z>0)
+    P(-0.6,0.8,Y_SUB,'auv',BLUE), P(1.0,1.5,Y_SUB-0.2,'auv',BLUE), P(0.4,0.3,Y_SUB+0.3,'auv',BLUE)
   ];
-  const N=ringPlan.length;
-  const R=190;
-  const agents=ringPlan.map((type,i)=>{
-    const ang=-Math.PI/2 + (i/N)*Math.PI*2;     // start at top, clockwise
-    return {
-      type, t:TYPES[type],
-      x:CX+Math.cos(ang)*R,
-      y:CY+Math.sin(ang)*R,
-      ang
-    };
-  });
 
-  // ===== center: compact policy network (the shared brain / consensus) =====
-  const brain=add(el('g',{}));
-  brain.appendChild(el('circle',{cx:CX,cy:CY,r:60,fill:'rgba(127,217,159,0.05)',stroke:GL,'stroke-width':1.4}));
-  add(txt(CX,CY-44,'DISTRIBUTED POLICY',{fill:G,fs:10,fw:600}));
-  const SHAPE=[3,5,5,3];
-  const bx0=CX-44,bx1=CX+44,by0=CY-24,by1=CY+40;
-  const cols=[];
-  for(let li=0;li<SHAPE.length;li++){const x=bx0+(bx1-bx0)*(li/(SHAPE.length-1));const col=[];
-    for(let ni=0;ni<SHAPE[li];ni++)col.push({x,y:by0+(by1-by0)*((ni+0.5)/SHAPE[li])});cols.push(col);}
-  const linkEls=[];
-  for(let li=0;li<cols.length-1;li++)for(const a of cols[li])for(const b of cols[li+1]){
-    const ln=el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:DIM,'stroke-width':0.6});brain.appendChild(ln);linkEls.push({ln,ax:a.x});}
-  const nodeEls=[];
-  cols.forEach(col=>col.forEach(nd=>{const c=el('circle',{cx:nd.x,cy:nd.y,r:4.5,fill:'rgba(127,217,159,0.12)',stroke:G,'stroke-width':1.2});brain.appendChild(c);nodeEls.push(c);}));
+  // central hub — shared distributed policy, hovering at mid-height
+  const hub={x:0,y:0.55,z:0};
 
-  // ===== peer-to-peer mesh between nearby agents (distributed coordination) =====
-  const meshLayer=add(el('g',{}));
-  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
-    const a=agents[i],b=agents[j];
-    const d=Math.hypot(a.x-b.x,a.y-b.y);
-    if(d<150){ // only nearby peers
-      meshLayer.appendChild(el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'rgba(127,217,159,0.10)','stroke-width':1}));
+  // connections: every agent <-> hub (spoke) + agent-to-agent across layers (mesh)
+  const links=[];
+  agents.forEach(a=>links.push({a:hub,b:a,spoke:true,col:a.col}));
+  // cross-layer mesh: connect each agent to the 2 nearest others (incl. different domains)
+  for(let i=0;i<agents.length;i++){
+    const d=agents.map((b,j)=>({j,dist:j===i?1e9:Math.hypot(agents[i].x-b.x,agents[i].y-b.y,agents[i].z-b.z)}))
+                  .sort((p,q)=>p.dist-q.dist);
+    for(let k=0;k<2;k++){
+      const j=d[k].j;
+      if(j>i) links.push({a:agents[i],b:agents[j],spoke:false});
+    }
+  }
+  // a couple of explicit long cross-domain links (drone <-> auv, car <-> usv) for "spanning space"
+  links.push({a:agents[0],b:agents[8],spoke:false,strong:true});  // drone↔auv
+  links.push({a:agents[4],b:agents[6],spoke:false,strong:true});  // car↔usv
+
+  const peerLinks=links.filter(l=>!l.spoke);
+  const msgs=[];
+  for(let i=0;i<9;i++) msgs.push({l:peerLinks[(Math.random()*peerLinks.length)|0],p:Math.random(),spd:0.005+Math.random()*0.008});
+  const spokeLinks=links.filter(l=>l.spoke);
+  const packets=spokeLinks.map(l=>({l,p:Math.random(),spd:0.004+Math.random()*0.006}));
+
+  // ---- projection (rotating) ----
+  let yaw=0; const FOV=2.7, CAMz=6.4, tilt=0.46;
+  function proj(p){
+    const c=Math.cos(yaw),s=Math.sin(yaw);
+    let X=p.x*c - p.z*s, Z=p.x*s + p.z*c, Y=p.y;
+    const cy=Math.cos(tilt),sy=Math.sin(tilt);
+    const Y2=Y*cy - Z*sy, Z2=Y*sy + Z*cy;
+    const zc=Z2+CAMz;
+    const sc=(FOV/zc)*Math.min(W,H)*0.34;
+    return {x:W/2+X*sc, y:H/2-Y2*sc, s:sc, d:zc};
+  }
+  function lerp3(a,b,t){return {x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,z:a.z+(b.z-a.z)*t};}
+
+  // ---- environment planes ----
+  function drawPlane(y,col,op,fill){
+    // grid on the (x,z) plane at altitude y
+    ctx.strokeStyle='rgba('+col+','+op+')';ctx.lineWidth=1*dpr;
+    const step=SPAN/3;
+    for(let gx=-SPAN;gx<=SPAN+0.01;gx+=step){
+      ctx.beginPath();
+      for(let gz=-SPAN;gz<=SPAN+0.01;gz+=step/3){const q=proj({x:gx,y,z:gz});(gz===-SPAN)?ctx.moveTo(q.x,q.y):ctx.lineTo(q.x,q.y);}
+      ctx.stroke();
+    }
+    for(let gz=-SPAN;gz<=SPAN+0.01;gz+=step){
+      ctx.beginPath();
+      for(let gx=-SPAN;gx<=SPAN+0.01;gx+=step/3){const q=proj({x:gx,y,z:gz});(gx===-SPAN)?ctx.moveTo(q.x,q.y):ctx.lineTo(q.x,q.y);}
+      ctx.stroke();
     }
   }
 
-  // ===== spokes: center <-> each agent, with packets =====
-  const spokeLayer=add(el('g',{}));
-  const conns=agents.map(ag=>{
-    const ln=el('line',{x1:CX,y1:CY,x2:ag.x,y2:ag.y,stroke:DIM,'stroke-width':1,'stroke-dasharray':'3 5'});
-    spokeLayer.appendChild(ln);return {ln,ag};
-  });
-  const packets=conns.map(()=>add(el('circle',{cx:CX,cy:CY,r:2.4,fill:G})));
-
-  // ===== icon drawers (small, ring-scale) =====
-  function chip(x,y,c){const g=el('g',{});g.appendChild(el('circle',{cx:x,cy:y,r:20,fill:'rgba(127,217,159,0.05)',stroke:c,'stroke-width':1.2}));return g;}
-  function drone(x,y,c){const g=chip(x,y,c);const s=8;
-    g.appendChild(el('path',{d:`M${x-s} ${y-s} L${x+s} ${y+s} M${x+s} ${y-s} L${x-s} ${y+s}`,stroke:c,'stroke-width':1.3,fill:'none'}));
-    [[-s,-s],[s,-s],[-s,s],[s,s]].forEach(p=>g.appendChild(el('circle',{cx:x+p[0],cy:y+p[1],r:3.2,fill:'none',stroke:c,'stroke-width':1.1})));
-    g.appendChild(el('rect',{x:x-3.2,y:y-3.2,width:6.4,height:6.4,rx:1.4,fill:'rgba(127,217,159,0.25)',stroke:c,'stroke-width':1}));return g;}
-  function car(x,y,c){const g=chip(x,y,c);
-    g.appendChild(el('path',{d:`M${x-10} ${y+4} L${x-7} ${y-2} L${x-2} ${y-2} L${x+1} ${y-7} L${x+7} ${y-7} L${x+9} ${y-2} L${x+10} ${y-2} L${x+10} ${y+4} Z`,fill:'rgba(202,164,107,0.18)',stroke:c,'stroke-width':1.2}));
-    g.appendChild(el('circle',{cx:x-6,cy:y+5,r:2.4,fill:'none',stroke:c,'stroke-width':1.1}));
-    g.appendChild(el('circle',{cx:x+6,cy:y+5,r:2.4,fill:'none',stroke:c,'stroke-width':1.1}));return g;}
-  function usv(x,y,c){const g=chip(x,y,c);
-    g.appendChild(el('path',{d:`M${x-10} ${y-1} L${x+10} ${y-1} L${x+6} ${y+6} L${x-7} ${y+6} Z`,fill:'rgba(127,217,159,0.16)',stroke:c,'stroke-width':1.2}));
-    g.appendChild(el('line',{x1:x,y1:y-1,x2:x,y2:y-10,stroke:c,'stroke-width':1.1}));
-    g.appendChild(el('circle',{cx:x,cy:y-11,r:1.8,fill:c}));return g;}
-  function auv(x,y,c){const g=chip(x,y,c);
-    g.appendChild(el('ellipse',{cx:x,cy:y,rx:11,ry:4.5,fill:'rgba(158,197,255,0.15)',stroke:c,'stroke-width':1.2}));
-    g.appendChild(el('path',{d:`M${x-9} ${y-3} L${x-13} ${y-6} M${x-9} ${y+3} L${x-13} ${y+6} M${x-11} ${y} L${x-14} ${y}`,stroke:c,'stroke-width':1,fill:'none'}));
-    g.appendChild(el('circle',{cx:x+7,cy:y,r:1.5,fill:'none',stroke:c,'stroke-width':1}));return g;}
-
-  agents.forEach(ag=> add(ag.t.draw(ag.x,ag.y,ag.t.c)) );
-
-  // domain labels at the four quadrant midpoints (outside the ring)
-  const labels=[
-    {x:CX, y:30,  s:'AERIAL · UAV'},
-    {x:500,y:CY,  s:'GROUND',  an:'end'},
-    {x:CX, y:505, s:'SURFACE · USV'},
-    {x:20, y:CY,  s:'SUBSEA',  an:'start'}
-  ];
-  labels.forEach(l=>add(txt(l.x,l.y,l.s,{fill:TXT,fs:9,an:l.an||'middle'})));
-
-  // ===== animation =====
-  let t=0;
-  function tick(){
-    t+=1;
-    nodeEls.forEach((c,i)=>{const a=0.5+0.5*Math.sin(t*0.06+i*0.7);c.setAttribute('fill','rgba(127,217,159,'+(0.10+a*0.3)+')');});
-    const wave=(t*0.6)%(cols.length+2);
-    linkEls.forEach(L=>{const on=Math.abs(L.ax-(bx0+(bx1-bx0)*((wave-1)/(cols.length-1))))<18;L.ln.setAttribute('stroke',on?GL:DIM);});
-    packets.forEach((pk,i)=>{
-      const ph=((t*0.01)+i*0.16)%2;
-      const f=ph<1?ph:(2-ph);
-      const ag=conns[i].ag;
-      pk.setAttribute('cx',CX+(ag.x-CX)*f);
-      pk.setAttribute('cy',CY+(ag.y-CY)*f);
-      pk.setAttribute('opacity',0.3+0.6*Math.sin(f*Math.PI));
-      pk.setAttribute('fill',ag.t.c);
-      conns[i].ln.setAttribute('stroke', f>0.4&&f<0.6?GL:DIM);
-    });
-    requestAnimationFrame(tick);
+  function drawIcon(a,P){
+    const r=P.s*0.15;const x=P.x,y=P.y;
+    ctx.lineWidth=Math.max(1,1.3*dpr*(P.s/120));
+    ctx.strokeStyle='rgba('+a.col+',0.95)';ctx.fillStyle='rgba('+a.col+',0.2)';
+    if(a.type==='drone'){
+      ctx.beginPath();ctx.moveTo(x-r,y-r);ctx.lineTo(x+r,y+r);ctx.moveTo(x+r,y-r);ctx.lineTo(x-r,y+r);ctx.stroke();
+      [[-r,-r],[r,-r],[-r,r],[r,r]].forEach(p=>{ctx.beginPath();ctx.arc(x+p[0],y+p[1],r*0.4,0,7);ctx.stroke();});
+      ctx.beginPath();ctx.rect(x-r*0.3,y-r*0.3,r*0.6,r*0.6);ctx.fill();ctx.stroke();
+    }else if(a.type==='car'){
+      ctx.beginPath();ctx.moveTo(x-r,y+r*0.4);ctx.lineTo(x-r*0.7,y-r*0.2);ctx.lineTo(x-r*0.2,y-r*0.2);
+      ctx.lineTo(x+r*0.1,y-r*0.7);ctx.lineTo(x+r*0.7,y-r*0.7);ctx.lineTo(x+r*0.9,y-r*0.2);ctx.lineTo(x+r,y-r*0.2);ctx.lineTo(x+r,y+r*0.4);ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.arc(x-r*0.55,y+r*0.5,r*0.24,0,7);ctx.stroke();ctx.beginPath();ctx.arc(x+r*0.55,y+r*0.5,r*0.24,0,7);ctx.stroke();
+    }else if(a.type==='usv'){
+      ctx.beginPath();ctx.moveTo(x-r,y-r*0.1);ctx.lineTo(x+r,y-r*0.1);ctx.lineTo(x+r*0.6,y+r*0.6);ctx.lineTo(x-r*0.7,y+r*0.6);ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.moveTo(x,y-r*0.1);ctx.lineTo(x,y-r*0.9);ctx.stroke();ctx.beginPath();ctx.arc(x,y-r,r*0.15,0,7);ctx.fillStyle='rgba('+a.col+',0.9)';ctx.fill();
+    }else{
+      ctx.beginPath();ctx.ellipse(x,y,r,r*0.4,0,0,7);ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.moveTo(x-r*0.9,y-r*0.28);ctx.lineTo(x-r*1.2,y-r*0.5);ctx.moveTo(x-r*0.9,y+r*0.28);ctx.lineTo(x-r*1.2,y+r*0.5);ctx.stroke();
+      ctx.beginPath();ctx.arc(x+r*0.7,y,r*0.12,0,7);ctx.stroke();
+    }
+    // vertical drop line to the surface plane (anchors it in 3D space)
+    const foot=proj({x:a.x,y:Y_SURF,z:a.z});
+    ctx.strokeStyle='rgba('+a.col+',0.15)';ctx.lineWidth=1*dpr;
+    ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(foot.x,foot.y);ctx.stroke();
   }
-  tick();
+
+  let t=0;
+  function frame(){
+    if(!W)resize();
+    ctx.clearRect(0,0,W,H);
+    t+=1; yaw+=0.0034;
+    agents.forEach(a=>{a._y=a.y+Math.sin(t*0.02+a.ph)*0.05;});
+
+    // planes: water surface (prominent), subsea floor, sky ceiling (faint)
+    drawPlane(Y_SUB-0.1, BLUE, 0.10);     // seabed
+    drawPlane(Y_SURF, G, 0.16);           // water surface
+    drawPlane(Y_AIR+0.3, SKY, 0.06);      // sky ceiling
+
+    // links
+    links.forEach(l=>{
+      const a={x:l.a.x,y:(l.a._y!=null?l.a._y:l.a.y),z:l.a.z};
+      const b={x:l.b.x,y:(l.b._y!=null?l.b._y:l.b.y),z:l.b.z};
+      const PA=proj(a),PB=proj(b);
+      const o=l.spoke?0.12:(l.strong?0.30:0.14);
+      ctx.strokeStyle='rgba('+G+','+o+')';ctx.lineWidth=(l.strong?1.4:0.9)*dpr;
+      ctx.beginPath();ctx.moveTo(PA.x,PA.y);ctx.lineTo(PB.x,PB.y);ctx.stroke();
+    });
+
+    // peer messages
+    msgs.forEach(m=>{m.p+=m.spd;if(m.p>=1){m.p=0;m.l=peerLinks[(Math.random()*peerLinks.length)|0];}
+      const q=proj(lerp3(m.l.a,m.l.b,m.p));const gl=Math.sin(m.p*Math.PI);
+      ctx.fillStyle='rgba('+G+','+(0.3+gl*0.6)+')';ctx.beginPath();ctx.arc(q.x,q.y,(1.6+gl*1.5)*dpr*(q.s/120),0,7);ctx.fill();});
+    // spoke packets
+    packets.forEach(pk=>{pk.p+=pk.spd;if(pk.p>=1)pk.p=0;
+      const f=pk.p<0.5?pk.p*2:(1-pk.p)*2;
+      const q=proj(lerp3(hub,pk.l.b,f));
+      ctx.fillStyle='rgba('+pk.l.col+',0.85)';ctx.beginPath();ctx.arc(q.x,q.y,1.6*dpr*(q.s/120),0,7);ctx.fill();});
+
+    // hub — neural-network "brain" (policy), drawn crisp in screen-space at hub position
+    const PH=proj(hub);
+    const R=PH.s*0.30;                       // brain half-size, scales with perspective
+    // soft halo
+    const gr=ctx.createRadialGradient(PH.x,PH.y,0,PH.x,PH.y,R*1.9);
+    gr.addColorStop(0,'rgba('+G+',0.30)');gr.addColorStop(1,'rgba('+G+',0)');
+    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(PH.x,PH.y,R*1.9,0,7);ctx.fill();
+    // enclosing capsule
+    ctx.strokeStyle='rgba('+G+',0.45)';ctx.lineWidth=1.3*dpr;
+    ctx.beginPath();ctx.ellipse(PH.x,PH.y,R*1.25,R*0.95,0,0,7);ctx.stroke();
+    // mini network: 4 layers
+    const NSHAPE=[2,3,3,2];
+    const bx0=PH.x-R*0.85, bx1=PH.x+R*0.85, by0=PH.y-R*0.55, by1=PH.y+R*0.55;
+    const bcols=[];
+    for(let li=0;li<NSHAPE.length;li++){
+      const bxx=bx0+(bx1-bx0)*(li/(NSHAPE.length-1));const col=[];
+      for(let ni=0;ni<NSHAPE[li];ni++)col.push({x:bxx,y:by0+(by1-by0)*((ni+0.5)/NSHAPE[li])});
+      bcols.push(col);
+    }
+    // connections, with a left→right activation wave
+    const bwave=(t*0.05)%(NSHAPE.length+1);
+    for(let li=0;li<bcols.length-1;li++){
+      const lit=Math.abs(li-(bwave-1))<0.9;
+      ctx.strokeStyle='rgba('+G+','+(lit?0.55:0.18)+')';
+      ctx.lineWidth=(lit?1.2:0.7)*dpr;
+      for(const a of bcols[li])for(const b of bcols[li+1]){
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+      }
+    }
+    // neurons
+    let bi=0;
+    bcols.forEach(col=>col.forEach(nd=>{
+      const act=0.5+0.5*Math.sin(t*0.08+bi*0.8);bi++;
+      ctx.fillStyle='rgba('+G+','+(0.4+act*0.5)+')';
+      ctx.beginPath();ctx.arc(nd.x,nd.y,Math.max(1.6,R*0.085),0,7);ctx.fill();
+      ctx.strokeStyle='rgba('+G+',0.5)';ctx.lineWidth=1*dpr;
+      ctx.beginPath();ctx.arc(nd.x,nd.y,Math.max(2.6,R*0.13),0,7);ctx.stroke();
+    }));
+
+    // agents depth-sorted
+    agents.map(a=>({a,P:proj({x:a.x,y:a._y,z:a.z})})).sort((u,v)=>v.P.d-u.P.d)
+      .forEach(o=>{ctx.globalAlpha=Math.max(0.45,Math.min(1,1.5-o.P.d/10));drawIcon(o.a,o.P);ctx.globalAlpha=1;});
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,200);});
 })();
 </script>
 </body>
