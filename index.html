@@ -220,6 +220,11 @@ section{padding:90px 0;border-bottom:1px solid var(--line)}
 }
 .proj-body{font-size:14px;font-weight:300;line-height:1.75;color:var(--ink2)}
 .proj-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.proj-img{
+  width:100%;border-radius:4px;display:block;
+  margin:0 0 18px;border:1px solid var(--line);
+  background:#0c1410;
+}
 
 /* ─ PATENTS ─ */
 .pat-list{display:flex;flex-direction:column;margin-bottom:44px}
@@ -459,10 +464,11 @@ footer{background:var(--ink);padding:28px 0}
         <div class="proj-tags"><span class="tag">Event Cameras</span><span class="tag">Visual Odometry</span><span class="tag">Best Paper</span></div>
       </div>
       <div class="proj">
-        <div class="proj-org">Intel Labs · 2019–2021</div>
-        <div class="proj-name">KB-RRT — Kinematic Path Planner</div>
-        <div class="proj-body">A bi-directional RRT that respects real robot kinematic constraints, generating smooth, executable trajectories rather than geometric paths. Extended to PG-RRT using Gaussian Mixture Models for probabilistic environment representation. Published at ICRA 2019 and IROS 2021.</div>
-        <div class="proj-tags"><span class="tag">Path Planning</span><span class="tag">RRT</span><span class="tag">ICRA</span><span class="tag">IROS</span></div>
+        <img class="proj-img" src="r11_.png" alt="RL-BiRRT reinforcement learning path planning" loading="lazy">
+        <div class="proj-org">Intel Labs / IIT KGP · 2019–2025</div>
+        <div class="proj-name">Learning-Driven Path Planning — KB-RRT → RL-BiRRT</div>
+        <div class="proj-body">A line of work on intelligent path planning: KB-RRT, a bi-directional RRT respecting real robot kinematic constraints to generate smooth, executable trajectories; extended to PG-RRT with Gaussian Mixture Models; and most recently RL-BiRRT, a reinforcement-learning-driven framework that learns to guide the search for faster, smarter planning. Published at ICRA 2019, IROS 2021, and IEEE 2025.</div>
+        <div class="proj-tags"><span class="tag">Path Planning</span><span class="tag">RL-BiRRT</span><span class="tag">Reinforcement Learning</span><span class="tag">ICRA</span><span class="tag">IROS</span></div>
       </div>
       <div class="proj">
         <div class="proj-org">Samsung R&D · 2022–2023</div>
