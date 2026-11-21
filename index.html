@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dibyendu Ghosh — robotics researcher and engineer (PhD, IIT Kharagpur) specializing in reinforcement learning, computer vision, SLAM, and autonomous navigation across aerial, ground, surface, and underwater systems. 6 granted US patents.">
+<meta name="author" content="Dibyendu Ghosh">
+<meta name="keywords" content="Dibyendu Ghosh, robotics, reinforcement learning, computer vision, SLAM, autonomous navigation, multi-robot systems, IIT Kharagpur">
+<meta property="og:title" content="Dibyendu Ghosh — Robotics & AI">
+<meta property="og:description" content="Robotics researcher and engineer specializing in reinforcement learning, computer vision, SLAM, and autonomous navigation.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dibyenduiitkgp09.github.io/">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="date=no">
+<meta name="format-detection" content="address=no">
+<meta name="format-detection" content="email=no">
+<title>Dibyendu Ghosh — Robotics & AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+:root{
+  --bg:#fbfaf7;
+  --surface:#ffffff;
+  --line:#e7e3da;
+  --line2:#d6d1c4;
+  --ink:#22201b;
+  --ink2:#4f4c44;
+  --ink3:#908b7e;
+  --accent:#3a4d39;
+  --accent-soft:#eef0ea;
+}
+
+html{background:var(--bg)}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 40px}
+
+/* ─ NAV ─ */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(251,250,247,0.9);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:1080px;margin:0 auto;padding:0 40px;
+  height:68px;display:flex;justify-content:space-between;align-items:center;
+}
+.brand{
+  font-family:'Fraunces',serif;
+  font-size:20px;font-weight:500;letter-spacing:-0.2px;
+  color:var(--ink);text-decoration:none;
+}
+.brand span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{
+  font-size:13px;font-weight:400;color:var(--ink3);
+  text-decoration:none;transition:color .2s;letter-spacing:0.01em;
+}
+.nav-links a:hover{color:var(--ink)}
+
+/* ─ HERO (dark tech) ─ */
+.hero{
+  position:relative;
+  background:#0c1410;
+  overflow:hidden;
+  padding:0;
+  min-height:88vh;
+  display:flex;align-items:center;
+  border-bottom:1px solid var(--line);
+}
+#hud{display:none}
+.hero-vignette{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(120% 90% at 78% 25%, rgba(76,140,100,0.18) 0%, transparent 55%),
+    radial-gradient(100% 100% at 20% 100%, rgba(8,14,11,0.9) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(10,18,14,0.35) 0%, rgba(10,16,13,0.65) 100%);
+}
+.hero-inner{
+  position:relative;z-index:2;
+  max-width:1240px;margin:0 auto;width:100%;
+  padding:120px 48px 80px;
+}
+.hero-text{max-width:860px}
+.hero-diagram{
+  width:100%;max-width:560px;
+  margin:64px auto 0;
+}
+.hero-diagram svg{width:100%;height:auto;display:block}
+.hero-diagram canvas{width:100%;height:auto;display:block}
+.hero-eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;letter-spacing:0.18em;text-transform:uppercase;
+  color:#6fcf97;margin-bottom:30px;
+  display:flex;align-items:center;gap:12px;
+}
+.hero-eyebrow::before{content:'';width:30px;height:1px;background:#6fcf97;opacity:0.7}
+.hero h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(40px,5.5vw,72px);
+  font-weight:500;line-height:1.04;letter-spacing:-2px;
+  color:#f3f6f2;margin-bottom:28px;max-width:16ch;
+}
+.hero h1 em{font-style:italic;color:#7fd99f}
+.hero-lead{
+  font-size:18px;font-weight:300;line-height:1.75;
+  color:#b9c4bc;max-width:660px;margin-bottom:42px;
+}
+.hero-lead b{font-weight:500;color:#eaf0ea}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:72px}
+.btn{
+  font-size:14px;font-weight:400;letter-spacing:0.01em;
+  padding:13px 28px;border-radius:2px;text-decoration:none;transition:all .2s;
+}
+.btn-solid{background:#5aa777;color:#06120c;border:1px solid #5aa777;font-weight:500}
+.btn-solid:hover{background:#7fd99f;border-color:#7fd99f}
+.btn-line{background:rgba(255,255,255,0.02);color:#cfd8d0;border:1px solid rgba(255,255,255,0.18)}
+.btn-line:hover{border-color:#7fd99f;color:#fff}
+
+/* hero stats integrated into dark panel */
+.hero-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid rgba(255,255,255,0.1);
+  margin-top:64px;
+}
+.hstat{padding:28px 0;border-right:1px solid rgba(255,255,255,0.08)}
+.hstat:last-child{border-right:none}
+.hstat-n{
+  font-family:'Fraunces',serif;
+  font-size:40px;font-weight:500;line-height:1;
+  color:#f3f6f2;letter-spacing:-1px;
+}
+.hstat-n sup{font-size:17px;color:#7fd99f;font-weight:400}
+.hstat-l{font-size:13px;color:#8a958c;margin-top:9px}
+
+/* ─ STAT STRIP (legacy, unused) ─ */
+.stat-strip{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.stat{
+  padding:36px 0;
+  border-right:1px solid var(--line);
+}
+.stat:last-child{border-right:none}
+.stat-n{
+  font-family:'Fraunces',serif;
+  font-size:42px;font-weight:500;line-height:1;
+  color:var(--ink);letter-spacing:-1px;
+}
+.stat-n sup{font-size:18px;color:var(--accent);font-weight:400}
+.stat-l{
+  font-size:13px;color:var(--ink3);margin-top:10px;font-weight:400;
+}
+
+/* ─ SECTION ─ */
+section{padding:90px 0;border-bottom:1px solid var(--line)}
+.sec-top{margin-bottom:56px}
+.sec-eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:14px;
+}
+.sec-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(30px,3.6vw,42px);
+  font-weight:500;letter-spacing:-1px;color:var(--ink);line-height:1.1;
+}
+.sec-intro{
+  font-size:17px;font-weight:300;color:var(--ink2);
+  max-width:620px;margin-top:16px;line-height:1.7;
+}
+
+/* ─ EXPERIENCE ─ */
+.exp{display:flex;flex-direction:column}
+.exp-item{
+  display:grid;grid-template-columns:170px 1fr;gap:48px;
+  padding:32px 0;border-top:1px solid var(--line);
+}
+.exp-item:first-child{border-top:none;padding-top:0}
+.exp-when{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13px;color:var(--accent);letter-spacing:0.02em;margin-bottom:6px;
+}
+.exp-org{font-size:14px;color:var(--ink3);font-weight:300}
+.exp-role{
+  font-family:'Fraunces',serif;
+  font-size:23px;font-weight:500;color:var(--ink);
+  letter-spacing:-0.4px;margin-bottom:10px;
+}
+.exp-body{font-size:15px;font-weight:300;line-height:1.75;color:var(--ink2);max-width:640px}
+.exp-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.tag{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:var(--ink2);padding:4px 11px;
+  background:var(--accent-soft);border-radius:2px;letter-spacing:0.01em;
+}
+
+/* ─ PROJECTS ─ */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.proj{
+  background:var(--surface);padding:38px 36px;
+  transition:background .2s;
+}
+.proj:hover{background:var(--accent-soft)}
+.proj-org{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:14px;
+}
+.proj-name{
+  font-family:'Fraunces',serif;
+  font-size:21px;font-weight:500;line-height:1.3;
+  color:var(--ink);margin-bottom:12px;letter-spacing:-0.3px;
+}
+.proj-body{font-size:14px;font-weight:300;line-height:1.75;color:var(--ink2)}
+.proj-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.proj-img{
+  width:100%;border-radius:4px;display:block;
+  margin:0 0 18px;border:1px solid var(--line);
+  background:#0c1410;
+}
+.proj-link{
+  display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;
+  color:var(--accent);text-decoration:none;
+  border-bottom:1px solid transparent;transition:border-color .2s;
+}
+.proj-link:hover{border-bottom-color:var(--accent)}
+
+/* ─ PATENTS ─ */
+.pat-list{display:flex;flex-direction:column;margin-bottom:44px}
+.pat-row{
+  display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
+  padding:18px 0;border-top:1px solid var(--line);
+}
+.pat-row:first-child{border-top:none}
+.pat-meta{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.pat-id{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:14px;color:var(--ink);font-weight:500;letter-spacing:0.01em;
+}
+a.pat-id{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+a.pat-id:hover{border-bottom-color:var(--accent)}
+.pat-domain{font-size:14px;color:var(--ink2);font-weight:300}
+.pat-status{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  letter-spacing:0.06em;text-transform:uppercase;
+  color:var(--accent);border:1px solid var(--line2);
+  padding:4px 12px;border-radius:2px;white-space:nowrap;
+}
+.scholar-link{
+  font-family:'IBM Plex Mono',monospace;font-size:13px;
+  color:var(--accent);text-decoration:none;
+  border-bottom:1px solid var(--accent);padding-bottom:2px;transition:opacity .2s;
+}
+.scholar-link:hover{opacity:0.65}
+
+/* ─ PRESS ─ */
+.press-card{
+  display:block;background:var(--surface);
+  border:1px solid var(--line);border-radius:3px;
+  padding:34px 36px;text-decoration:none;
+  transition:border-color .2s,background .2s;
+}
+.press-card:hover{border-color:var(--accent);background:var(--accent-soft)}
+.press-source{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:12px;
+  display:flex;align-items:center;gap:10px;
+}
+.press-source .dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.press-headline{
+  font-family:'Fraunces',serif;
+  font-size:25px;font-weight:500;line-height:1.25;
+  color:var(--ink);letter-spacing:-0.4px;margin-bottom:14px;
+}
+.press-excerpt{font-size:15px;font-weight:300;line-height:1.7;color:var(--ink2);max-width:680px}
+.press-meta{
+  display:flex;align-items:center;gap:16px;margin-top:18px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink3);
+}
+.press-read{color:var(--accent);display:flex;align-items:center;gap:5px}
+
+/* ─ CONTACT ─ */
+#contact{border-bottom:none;padding-bottom:60px}
+.contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:start}
+.contact-pull{
+  font-family:'Fraunces',serif;
+  font-size:26px;font-weight:400;font-style:italic;
+  line-height:1.5;color:var(--ink2);
+}
+.contact-pull b{font-style:normal;font-weight:500;color:var(--ink)}
+.clink{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 0;border-top:1px solid var(--line);
+  text-decoration:none;color:var(--ink2);transition:all .2s;
+}
+.clink:first-child{border-top:none}
+.clink:hover{color:var(--ink);padding-left:8px}
+.clink:hover .ci{border-color:var(--accent);background:var(--accent);color:#fff}
+.ci{
+  width:38px;height:38px;border:1px solid var(--line2);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:all .2s;color:var(--ink3);
+}
+.clink:hover .ci{color:#fff}
+.cl-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
+.cl-val{font-size:15px;font-weight:400;color:inherit}
+
+/* ─ FOOTER ─ */
+footer{background:var(--ink);padding:28px 0}
+.foot-inner{
+  max-width:1080px;margin:0 auto;padding:0 40px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.foot-t{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#88847a;letter-spacing:0.02em}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.on{opacity:1;transform:translateY(0)}
+
+@media(max-width:820px){
+  .wrap,.nav-inner,.foot-inner{padding:0 24px}
+  nav .nav-links{display:none}
+  .hero-inner{padding:90px 24px 60px}
+  .hero-diagram{max-width:380px;margin:48px auto 0}
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .hstat:nth-child(2){border-right:none}
+  .hstat:nth-child(1),.hstat:nth-child(2){border-bottom:1px solid rgba(255,255,255,0.08)}
+  .stat-strip{grid-template-columns:1fr 1fr}
+  .stat{border-right:none;border-bottom:1px solid var(--line);padding:28px 0;padding-left:4px}
+  .stat:nth-child(odd){border-right:1px solid var(--line)}
+  .exp-item{grid-template-columns:1fr;gap:10px}
+  .proj-grid{grid-template-columns:1fr}
+  .pat-row{grid-template-columns:1fr;gap:10px}
+  .pat-status{justify-self:start}
+  .contact-grid{grid-template-columns:1fr;gap:36px}
+}
+/* ─ MESSAGE FORM ─ */
+.msg-form{margin-top:56px;max-width:720px;display:grid;grid-template-columns:1fr 1fr;gap:18px 24px}
+.msg-form .full{grid-column:1/-1}
+.msg-form label{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.msg-form input,.msg-form select,.msg-form textarea{width:100%;font:inherit;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line2);border-radius:2px;padding:11px 13px}
+.msg-form textarea{min-height:140px;resize:vertical}
+.msg-form input:focus,.msg-form select:focus,.msg-form textarea:focus{outline:none;border-color:var(--accent)}
+.msg-form .hint{font-size:13px;color:var(--ink3);margin-top:6px}
+.msg-form .err{font-size:13px;color:#a23b2a;margin-top:6px;min-height:1em}
+.msg-form button{justify-self:start;font:inherit;font-size:14px;font-weight:500;padding:13px 28px;border-radius:2px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+.msg-form button:disabled{opacity:.6;cursor:default}
+.msg-status{grid-column:1/-1;font-size:15px;color:var(--ink2)}
+.msg-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.msg-checks{display:flex;flex-direction:column;gap:10px}
+.msg-check{display:flex!important;gap:10px;align-items:flex-start;font-family:inherit!important;font-size:14px!important;letter-spacing:0!important;text-transform:none!important;color:var(--ink2)!important;margin:0!important}
+.msg-check input{width:auto!important;margin-top:4px}
+@media (max-width:700px){.msg-form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="#home">Dibyendu <span>Ghosh</span></a>
+    <ul class="nav-links">
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#patents">Patents</a></li>
+      <li><a href="#press">Press</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO (dark tech) -->
+<header class="hero" id="home">
+  <div class="hero-vignette"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Robotics · Computer Vision · Physical AI</div>
+      <h1>Building autonomous machines that <em>navigate</em>, and coordinate, in the real world.</h1>
+      <p class="hero-lead">
+        I'm Dibyendu Ghosh, VP of Robotics at <b>Rekise Marine</b>. I hold a PhD in Computer Vision &amp; Robotics from <b>IIT Kharagpur</b>, and have previously led robotics and perception teams at <b>Ola Electric</b>, <b>Samsung R&D</b>, and <b>Intel Labs</b>. My work spans the full autonomous-navigation stack — perception, state estimation, learning, and control — and extends to multi-robot and swarm coordination across aerial, ground, surface, and underwater platforms, with granted patents and publications at ICRA, IROS, and ICAR.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-solid">Get in touch</a>
+        <a href="https://scholar.google.co.in/citations?user=TJO5YNkAAAAJ" target="_blank" class="btn btn-line">Google Scholar →</a>
+      </div>
+    </div>
+    <div class="hero-diagram" id="diagram"></div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n">7</div><div class="hstat-l">US & intl. patents</div></div>
+      <div class="hstat"><div class="hstat-n">25<sup>+</sup></div><div class="hstat-l">Publications</div></div>
+      <div class="hstat"><div class="hstat-n">12</div><div class="hstat-l">Years post-PhD</div></div>
+      <div class="hstat"><div class="hstat-n">30<sup>+</sup></div><div class="hstat-l">Engineers led</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="sec-top reveal">
+      <div class="sec-eyebrow">Career</div>
+      <div class="sec-title">Twelve years, real systems</div>
+    </div>
+    <div class="exp">
+      <div class="exp-item reveal">
+        <div><div class="exp-when">2025 — Present</div><div class="exp-org">Rekise Marine</div></div>
+        <div>
+          <div class="exp-role">Vice President, Robotics</div>
+          <div class="exp-body">Leading autonomous navigation for marine robots across both surface vessels (USV) and underwater vehicles (UUV) — spanning applications in survey, surveillance, and inspection across open-water environments.</div>
+          <div class="exp-tags"><span class="tag">Marine Robotics</span><span class="tag">USV / UUV</span><span class="tag">Survey & Surveillance</span></div>
+        </div>
+      </div>
+      <div class="exp-item reveal">
+        <div><div class="exp-when">2023 — 2025</div><div class="exp-org">Ola Electric</div></div>
+        <div>
+          <div class="exp-role">Associate Director, Perception</div>
+          <div class="exp-body">Spearheaded perception for autonomous vehicles, robotics, and two-wheelers, leading 7 research engineers. End-to-end data-driven navigation, multi-camera BEV generation, SLAM, and a full two-wheeler ADAS stack with forward collision warning and adaptive cruise control.</div>
+          <div class="exp-tags"><span class="tag">BEV Generation</span><span class="tag">LLM Embodied AI</span><span class="tag">ADAS</span></div>
+        </div>
+      </div>
+      <div class="exp-item reveal">
+        <div><div class="exp-when">2022 — 2023</div><div class="exp-org">Samsung R&D</div></div>
+        <div>
+          <div class="exp-role">Research Lead</div>
+          <div class="exp-body">Led 16 engineers across robotics, computer vision, and deep reinforcement learning. Built robot re-localization using 2D LiDAR, human detection and tracking, RL-based coverage path planners, and an RL agent for software memory leak detection.</div>
+          <div class="exp-tags"><span class="tag">Deep RL</span><span class="tag">LiDAR</span><span class="tag">Path Planning</span></div>
+        </div>
+      </div>
+      <div class="exp-item reveal">
+        <div><div class="exp-when">2016 — 2022</div><div class="exp-org">Intel Labs, Bangalore</div></div>
+        <div>
+          <div class="exp-role">Research Scientist</div>
+          <div class="exp-body">Six years building distributed swarm robotics, multi-robot SLAM, and event camera-based visual inertial odometry. Led a team including two PhD holders. Gordy Award nominee — Intel Labs' highest honour. Published at ICRA, ISSCC, IROS, and MFI.</div>
+          <div class="exp-tags"><span class="tag">Swarm Robotics</span><span class="tag">Event Cameras</span><span class="tag">Multi-Robot SLAM</span></div>
+        </div>
+      </div>
+      <div class="exp-item reveal">
+        <div><div class="exp-when">2014 — 2016</div><div class="exp-org">Uurmi Systems</div></div>
+        <div>
+          <div class="exp-role">Senior Computer Vision Engineer</div>
+          <div class="exp-body">Led a team of five engineers and four university students on an autonomous car project — visual odometry, SLAM, path planning, multi-sensor fusion, and object tracking.</div>
+          <div class="exp-tags"><span class="tag">Autonomous Car</span><span class="tag">Visual Odometry</span></div>
+        </div>
+      </div>
+      <div class="exp-item reveal">
+        <div><div class="exp-when">2011 — 2014</div><div class="exp-org">IIT Kharagpur</div></div>
+        <div>
+          <div class="exp-role">Founder & Head, AGV Research Group</div>
+          <div class="exp-body">Founded and led a 30-student autonomous ground vehicle team across departments. Designed end-to-end navigation for the Intelligent Ground Vehicle Competition (IGVC), Michigan, 2012–14.</div>
+          <div class="exp-tags"><span class="tag">AGV</span><span class="tag">IGVC</span><span class="tag">IIT KGP</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec-top reveal">
+      <div class="sec-eyebrow">Signature work</div>
+      <div class="sec-title">Selected projects</div>
+      <div class="sec-intro">A handful of the systems I'm most proud of — spanning swarms, event-based vision, learned planning, and field robotics.</div>
+    </div>
+    <div class="proj-grid reveal">
+      <div class="proj">
+        <div class="proj-org">Uurmi Systems & IIT KGP · 2011–2016</div>
+        <div class="proj-name">Autonomous Car — Self-Driving on Indian Roads</div>
+        <div class="proj-body">One of my most significant career contributions — building a full self-driving stack for Indian road conditions. Led teams developing lane detection, visual odometry, SLAM, multi-sensor fusion, path planning, and object tracking. The work began with the AGV group's IGVC campaigns at IIT Kharagpur and matured into a university-industry autonomous car program at Uurmi Systems.</div>
+        <div class="proj-tags"><span class="tag">Self-Driving</span><span class="tag">Lane Detection</span><span class="tag">SLAM</span><span class="tag">Sensor Fusion</span></div>
+        <a class="proj-link" href="https://www.youtube.com/@agvkgp" target="_blank">▶ Watch demos on the AGV YouTube channel →</a>
+      </div>
+      <div class="proj">
+        <div class="proj-org">Intel Labs · 2017–2019</div>
+        <div class="proj-name">Distributed Autonomous Swarm Robots</div>
+        <div class="proj-body">A fully distributed swarm where ground robots and drones coordinate without any central server — each making local decisions from shared state and dynamic anchor selection. Demonstrated as a working PoC; the work led to several granted US patents and was featured at ISSCC 2019 on a custom 22nm CMOS robot SoC.</div>
+        <div class="proj-tags"><span class="tag">Swarm</span><span class="tag">Multi-Robot</span><span class="tag">22nm SoC</span><span class="tag">ISSCC</span></div>
+      </div>
+      <div class="proj">
+        <div class="proj-org">Intel Labs · 2019–2022</div>
+        <div class="proj-name">AVIO — Event-Based Visual Inertial Odometry</div>
+        <div class="proj-body">Visual odometry built on event cameras — neuromorphic sensors firing at microsecond resolution. AVIO fuses asynchronous event streams with IMU data for low-latency localization in fast-motion and low-light conditions where conventional cameras fail. Best Paper, IEEE CONECCT 2023.</div>
+        <div class="proj-tags"><span class="tag">Event Cameras</span><span class="tag">Visual Odometry</span><span class="tag">Best Paper</span></div>
+      </div>
+      <div class="proj">
+        <div class="proj-org">Intel Labs · 2019–2021</div>
+        <div class="proj-name">KB-RRT — Kinematic Path Planner</div>
+        <div class="proj-body">A bi-directional RRT that respects real robot kinematic constraints, generating smooth, executable trajectories rather than geometric paths. Extended to PG-RRT using Gaussian Mixture Models for probabilistic environment representation. Published at ICRA 2019 and IROS 2021.</div>
+        <div class="proj-tags"><span class="tag">Path Planning</span><span class="tag">RRT</span><span class="tag">ICRA</span><span class="tag">IROS</span></div>
+      </div>
+      <div class="proj">
+        <img class="proj-img" src="r11_.png" alt="RL-BiRRT reinforcement learning path planning" loading="lazy">
+        <div class="proj-org">IIT Kharagpur · 2025</div>
+        <div class="proj-name">RL-BiRRT — Reinforcement Learning Path Planning</div>
+        <div class="proj-body">A reinforcement-learning-driven framework for intelligent path planning that learns to guide the bi-directional RRT search — producing faster, smarter trajectories than classical sampling-based planners. Published at ICAR 2025.</div>
+        <div class="proj-tags"><span class="tag">RL-BiRRT</span><span class="tag">Reinforcement Learning</span><span class="tag">Path Planning</span><span class="tag">ICAR</span></div>
+      </div>
+      <div class="proj">
+        <img class="proj-img" src="DeepQ.png" alt="MultiAgent-DeepQ reinforcement learning coverage path planning" loading="lazy">
+        <div class="proj-org">IIT Kharagpur · 2025</div>
+        <div class="proj-name">Deep RL Coverage Path Planner</div>
+        <div class="proj-body">Deep reinforcement learning agents trained to solve coverage planning — ensuring a robot covers every point in an unknown environment with minimal overlap. Extended to multi-agent coordination (MultiAgent-DeepQ) where agents divide territory and explore unknown environments together. Published at ICAR 2025.</div>
+        <div class="proj-tags"><span class="tag">Deep RL</span><span class="tag">Coverage Planning</span><span class="tag">Multi-Agent</span><span class="tag">ICAR</span></div>
+      </div>
+      <div class="proj">
+        <div class="proj-org">Ola Electric · 2023–2025</div>
+        <div class="proj-name">Multi-Camera Bird's Eye View</div>
+        <div class="proj-body">Fused feeds from cameras around a two-wheeler into a unified top-down representation of the surroundings — enabling accurate object detection, lane awareness, and safe navigation for autonomous two-wheelers at production scale.</div>
+        <div class="proj-tags"><span class="tag">BEV Perception</span><span class="tag">Multi-Camera</span><span class="tag">ADAS</span></div>
+      </div>
+      <div class="proj">
+        <img class="proj-img" src="mm.jpg" alt="3D underground mine mapping autonomous robot" loading="lazy">
+        <div class="proj-org">IIT Kharagpur · PhD Thesis</div>
+        <div class="proj-name">3D Underground Mine Mapping Robot</div>
+        <div class="proj-body">A prototype autonomous mobile robot that maps GPS-denied underground mines in 3D using 6D SLAM — fusing LiDAR, IMU, and cameras for robust pose estimation in featureless, dust-filled tunnels. Sponsored by ISRO. The work that started it all.</div>
+        <div class="proj-tags"><span class="tag">6D SLAM</span><span class="tag">Mine Robotics</span><span class="tag">ISRO</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH 2026 -->
+  <section id="research">
+    <div class="sec-top reveal">
+      <div class="sec-eyebrow">Research · 2026</div>
+      <div class="sec-title">Recent papers</div>
+      <div class="sec-intro">Code is available for non-commercial research on request: please use the <a href="#message">form</a> with your official university or company email address.</div>
+    </div>
+
+    <div class="proj-grid reveal" style="margin-bottom:40px">
+      <div class="proj">
+        <video src="videos/pipeline_explained.mp4" controls muted playsinline preload="metadata" style="width:100%;display:block;margin-bottom:18px"></video>
+        <div class="proj-org">Demo · simulation (MuJoCo) · Boston Dynamics Spot</div>
+        <div class="proj-name">VLMM → PhysVLMM → MBA</div>
+      </div>
+      <div class="proj">
+        <video src="videos/kitchen_g1.mp4" controls muted playsinline preload="metadata" style="width:100%;display:block;margin-bottom:18px"></video>
+        <div class="proj-org">Demo · simulation (MuJoCo) · Unitree G1 humanoid</div>
+        <div class="proj-name">A humanoid in a kitchen: map, touch, decide, act</div>
+      </div>
+    </div>
+
+    <div class="proj-grid reveal">
+      <div class="proj">
+        <div class="proj-org">arXiv 2607.16173 · 2026</div>
+        <div class="proj-name">Vision-Language-Motion Maps: An Open-Vocabulary, Uncertainty-Aware, Queryable Motion Attribute for 3D Scene Maps</div>
+        <a class="proj-link" href="https://arxiv.org/abs/2607.16173" target="_blank">Paper on arXiv →</a>
+      </div>
+      <div class="proj">
+        <div class="proj-org">arXiv 2607.23797 · 2026</div>
+        <div class="proj-name">Memory for Attention: Language-Conditioned Re-Perception with a Vision-Language-Motion Map</div>
+        <a class="proj-link" href="https://arxiv.org/abs/2607.23797" target="_blank">Paper on arXiv →</a>
+      </div>
+      <div class="proj">
+        <div class="proj-org">arXiv 2609.06424 · 2026</div>
+        <div class="proj-name">OVMAN: A Task and Benchmark for Open-Vocabulary Motion-Aware Navigation</div>
+        <a class="proj-link" href="https://arxiv.org/abs/2609.06424" target="_blank">Paper on arXiv →</a>
+      </div>
+      <div class="proj">
+        <div class="proj-org">arXiv 2610.40539 · 2026</div>
+        <div class="proj-name">PhysVLMM: Interaction-Conditioned Physical Belief Maps for Articulated Objects in Robot Scene Maps</div>
+        <a class="proj-link" href="https://arxiv.org/abs/2610.40539" target="_blank">Paper on arXiv →</a>
+      </div>
+      <div class="proj">
+        <div class="proj-org">arXiv 2611.12113 · 2026</div>
+        <div class="proj-name">Motion Belief Action: From a Visual Scene Map to Physical Decisions</div>
+        <a class="proj-link" href="https://arxiv.org/abs/2611.12113" target="_blank">Paper on arXiv →</a>
+      </div>
+      <div class="proj">
+        <div class="proj-org">All publications</div>
+        <div class="proj-name">Patents, journal and conference papers, and citations</div>
+        <a class="proj-link" href="https://scholar.google.co.in/citations?user=TJO5YNkAAAAJ" target="_blank">Google Scholar →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATENTS -->
+  <section id="patents">
+    <div class="sec-top reveal">
+      <div class="sec-eyebrow">Intellectual property</div>
+      <div class="sec-title">Granted patents — US & India</div>
+    </div>
+    <div class="pat-list reveal">
+      <div class="pat-row">
+        <div class="pat-meta"><a class="pat-id" href="https://patents.justia.com/patent/12202148" target="_blank">US 12202148</a><span class="pat-domain">Autonomous machine collaboration · 2025</span></div>
+      </div>
+      <div class="pat-row">
+        <div class="pat-meta"><a class="pat-id" href="https://patents.justia.com/patent/11984034" target="_blank">US 11984034</a><span class="pat-domain">Unmanned vehicle positioning methods · 2024</span></div>
+      </div>
+      <div class="pat-row">
+        <div class="pat-meta"><a class="pat-id" href="https://patents.justia.com/patent/11635774" target="_blank">US 11635774</a><span class="pat-domain">Dynamic anchor selection for swarm localization · 2023</span></div>
+      </div>
+      <div class="pat-row">
+        <div class="pat-meta"><a class="pat-id" href="https://patents.justia.com/patent/11237877" target="_blank">US 11237877</a><span class="pat-domain">Robot swarm propagation using virtual partitions · 2022</span></div>
+      </div>
+      <div class="pat-row">
+        <div class="pat-meta"><a class="pat-id" href="https://patents.justia.com/patent/11137746" target="_blank">US 11137746</a><span class="pat-domain">Systems & methods for robot swarm coordination · 2021</span></div>
+      </div>
+      <div class="pat-row">
+        <div class="pat-meta"><a class="pat-id" href="https://patents.justia.com/patent/10775774" target="_blank">US 10775774</a><span class="pat-domain">Systems, apparatus & methods for robot swarm coordination · 2020</span></div>
+      </div>
+      <div class="pat-row">
+        <div class="pat-meta"><span class="pat-id">IN WI-202306-048</span><span class="pat-domain">Intelligent multi-robot coordination</span></div>
+      </div>
+    </div>
+    <a href="https://patents.justia.com/inventor/dibyendu-ghosh" target="_blank" class="scholar-link">View all patents on Justia →</a>
+  </section>
+
+  <!-- PRESS -->
+  <section id="press">
+    <div class="sec-top reveal">
+      <div class="sec-eyebrow">Press & writing</div>
+      <div class="sec-title">In the spotlight</div>
+    </div>
+    <a href="https://medium.com/the-scholars-avenue/know-your-research-group-agv-968878314321" target="_blank" class="press-card reveal">
+      <div class="press-source"><span class="dot"></span>The Scholars' Avenue · IIT Kharagpur Campus Newspaper</div>
+      <div class="press-headline">Know Your Research Group — AGV</div>
+      <div class="press-excerpt">A feature on the Autonomous Ground Vehicle Research Group at IIT Kharagpur, which I founded — a multidisciplinary student team building self-driving vehicles and competing at the Intelligent Ground Vehicle Competition (IGVC), Michigan.</div>
+      <div class="press-meta">
+        <span>Apr 2021</span>
+        <span>·</span>
+        <span>5 min read</span>
+        <span class="press-read">Read on Medium <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+      </div>
+    </a>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="sec-top reveal">
+      <div class="sec-eyebrow">Get in touch</div>
+      <div class="sec-title">Open to collaboration</div>
+    </div>
+    <div class="contact-grid">
+      <p class="contact-pull reveal">Currently exploring my next venture in <b>autonomous systems</b>. Open to <b>founding</b>, advisory and deep-tech collaboration — or just a conversation about where robotics is headed.</p>
+      <div class="reveal">
+        <a href="#message" class="clink">
+          <div class="ci"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+          <div><div class="cl-sub">Email</div><div class="cl-val">Send a message ↓</div></div>
+        </a>
+        <a href="https://www.linkedin.com/in/dibyendu-ghosh-97978213" target="_blank" class="clink">
+          <div class="ci"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
+          <div><div class="cl-sub">LinkedIn</div><div class="cl-val">dibyendu-ghosh-97978213</div></div>
+        </a>
+        <a href="https://scholar.google.co.in/citations?user=TJO5YNkAAAAJ" target="_blank" class="clink">
+          <div class="ci"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div><div class="cl-sub">Google Scholar</div><div class="cl-val">Publications & citations</div></div>
+        </a>
+        <a href="https://github.com/dibyenduiitkgp09" target="_blank" class="clink">
+          <div class="ci"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div>
+          <div><div class="cl-sub">GitHub</div><div class="cl-val">dibyenduiitkgp09</div></div>
+        </a>
+      </div>
+    </div>
+      <form id="message" class="msg-form reveal" novalidate>
+      <input type="hidden" name="access_key" value="27abce23-4694-4263-96fd-5e7665798345">
+      <input type="hidden" name="subject" value="Website message — dibyenduiitkgp09.github.io">
+      <input type="hidden" name="from_name" value="dibyenduiitkgp09.github.io">
+      <input type="hidden" name="ip_location" id="m-geo" value="">
+      <input type="hidden" name="ip_network" id="m-net" value="">
+      <input type="hidden" name="browser_time_zone" id="m-tz" value="">
+      <input type="hidden" name="email_domain_check" id="m-mx" value="">
+      <div class="msg-hp" aria-hidden="true"><input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"></div>
+
+      <div><label for="m-name">Name</label><input id="m-name" name="name" required autocomplete="name"></div>
+      <div><label for="m-org">University / company</label><input id="m-org" name="organisation" required autocomplete="organization"></div>
+      <div class="full">
+        <label for="m-email">Official email</label>
+        <input id="m-email" name="email" type="email" required autocomplete="email" placeholder="name@university.edu or name@company.com">
+        <div class="hint">Your university or company address. Gmail, Yahoo, Outlook/Hotmail and other personal addresses are not accepted.</div>
+        <div class="err" id="m-email-err"></div>
+      </div>
+      <div class="full">
+        <label for="m-paper">Paper</label>
+        <select id="m-paper" name="paper">
+          <option>—</option>
+          <option>VLMM (arXiv 2607.16173)</option><option>Memory for Attention (arXiv 2607.23797)</option>
+          <option>OVMAN (arXiv 2609.06424)</option><option>PhysVLMM (arXiv 2610.40539)</option><option>Motion Belief Action (arXiv 2611.12113)</option>
+        </select>
+      </div>
+      <div class="full"><label for="m-msg">Message — what will you use it for?</label><textarea id="m-msg" name="message" required></textarea></div>
+      <label class="full msg-check"><input type="checkbox" name="agree" value="non-commercial research only; no military, weapons or surveillance use; no redistribution" required> I will use the code only for non-commercial research — not for military, weapons or surveillance purposes — and will not share it further.</label>
+      <button type="submit" id="m-send">Send</button>
+      <div class="msg-status" id="m-status" role="status"></div>
+      <div class="full hint">When you send, your IP address and its approximate location are recorded with your message, only to review requests.</div>
+    </form>
+    <script>
+    (function(){
+      var PERSONAL = /@(gmail\.com|googlemail\.com|(yahoo|ymail|rocketmail|hotmail|outlook|live|msn|aol|gmx|yandex)\.[a-z]{2,3}(\.[a-z]{2})?|icloud\.com|me\.com|mac\.com|proton\.me|protonmail\.(com|ch)|pm\.me|mail\.com|rediffmail\.com|zohomail\.(com|in)|qq\.com|163\.com|126\.com|tutanota\.(com|de)|tuta\.io|hey\.com|fastmail\.(com|fm)|inbox\.com)$/i;
+      var f = document.getElementById('message'); if (!f) return;
+      var email = document.getElementById('m-email'), err = document.getElementById('m-email-err');
+      var btn = document.getElementById('m-send'), st = document.getElementById('m-status');
+      function syntaxOk(){
+        var v = email.value.trim();
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { err.textContent = 'Please enter a valid email address.'; return false; }
+        if (PERSONAL.test(v)) { err.textContent = 'Please use your official university or company email, not a personal one.'; return false; }
+        err.textContent = ''; return true;
+      }
+      function getJSON(url, opts){ return fetch(url, opts).then(function(r){ return r.json(); }); }
+      // does the email domain have a mail server? (only the domain is looked up)
+      function mxCheck(domain){
+        return getJSON('https://cloudflare-dns.com/dns-query?name=' + encodeURIComponent(domain) + '&type=MX', {headers: {'accept': 'application/dns-json'}})
+          .then(function(d){ return (d.Status === 0 && d.Answer && d.Answer.length) ? 'mail server found' : 'NO mail server'; })
+          .catch(function(){ return 'check unavailable'; });
+      }
+      // IP-based location: ipwho.is, then ipapi.co as backup
+      function geo(){
+        return getJSON('https://ipwho.is/').then(function(d){
+          if (!d || d.success === false) throw 0;
+          var c = d.connection || {};
+          return { loc: [d.city, d.region, d.country].filter(Boolean).join(', ') + ' (IP ' + d.ip + ')', net: (c.org || c.isp || '') + (c.asn ? ' (AS' + c.asn + ')' : '') };
+        }).catch(function(){
+          return getJSON('https://ipapi.co/json/').then(function(d){
+            if (!d || d.error) throw 0;
+            return { loc: [d.city, d.region, d.country_name].filter(Boolean).join(', ') + ' (IP ' + d.ip + ')', net: (d.org || '') + (d.asn ? ' (' + d.asn + ')' : '') };
+          });
+        }).catch(function(){ return { loc: 'location lookup failed', net: '' }; });
+      }
+      email.addEventListener('blur', syntaxOk);
+      f.addEventListener('submit', function(e){
+        e.preventDefault(); st.textContent = '';
+        if (!syntaxOk()) { email.focus(); return; }
+        if (!f.checkValidity()) { st.textContent = 'Please fill in every field and tick the box.'; return; }
+        btn.disabled = true; btn.textContent = 'Sending…';
+        try { document.getElementById('m-tz').value = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (x) {}
+        var domain = email.value.trim().split('@')[1].toLowerCase();
+        Promise.all([mxCheck(domain), geo()]).then(function(r){
+          var mx = r[0], g = r[1];
+          if (mx === 'NO mail server') { err.textContent = 'This email domain cannot receive email. Please check the address.'; btn.disabled = false; btn.textContent = 'Send'; email.focus(); return; }
+          document.getElementById('m-mx').value = domain + ': ' + mx;
+          document.getElementById('m-geo').value = g.loc;
+          document.getElementById('m-net').value = g.net;
+          return getJSON('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(f) })
+            .then(function(d){
+              if (d && d.success) { f.reset(); st.textContent = 'Thank you — your message has been sent. I will reply to your official email.'; }
+              else { st.textContent = 'Sorry, the message could not be sent. Please try again later.'; }
+            })
+            .catch(function(){ st.textContent = 'Sorry, the message could not be sent. Please check your connection and try again.'; })
+            .finally(function(){ btn.disabled = false; btn.textContent = 'Send'; });
+        });
+      });
+    })();
+    </script>
+  </section>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-t">© 2026 Dibyendu Ghosh</div>
+  </div>
+</footer>
+
+<script>
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on')}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// ─ Hero: 3D layered world — air · ground · surface · subsea, fully connected ─
+(function(){
+  const host=document.getElementById('diagram');
+  if(!host) return;
+  const cv=document.createElement('canvas');
+  host.appendChild(cv);
+  const ctx=cv.getContext('2d');
+
+  const G='127,217,159', GOLD='202,164,107', BLUE='158,197,255', SKY='180,205,225';
+
+  let W,H,dpr;
+  function resize(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    const rw=host.clientWidth||440;
+    const rh=Math.round(rw*1.05);
+    cv.style.width=rw+'px'; cv.style.height=rh+'px';
+    W=cv.width=rw*dpr; H=cv.height=rh*dpr;
+  }
+  resize();
+
+  // world: y = altitude (+ air, 0 = water surface, - subsea). ground sits at y=0 too (land plane)
+  const SPAN=2.6;          // half-width of the world plane
+  const Y_AIR=1.7, Y_GND=0.05, Y_SURF=0.0, Y_SUB=-1.6;
+
+  // agents inhabit layers; positioned across the plane (x,z)
+  function P(x,z,y,type,col){return {x,z,y,type,col,ph:Math.random()*6.28,_y:y};}
+  let agents=[
+    // aerial drones (spread high)
+    P(-1.4, 1.1, Y_AIR, 'drone',G), P(1.3,-0.6,Y_AIR+0.3,'drone',G), P(0.2,1.6,Y_AIR-0.2,'drone',G),
+    // ground vehicles (on land side, z<0)
+    P(-1.6,-1.4,Y_GND,'car',GOLD), P(0.0,-1.7,Y_GND,'car',GOLD), P(1.5,-1.3,Y_GND,'car',GOLD),
+    // surface vessels (on water side, z>0, at surface)
+    P(-1.2,1.5,Y_SURF,'usv',G), P(1.6,1.2,Y_SURF,'usv',G),
+    // underwater vehicles (below surface, z>0)
+    P(-0.6,0.8,Y_SUB,'auv',BLUE), P(1.0,1.5,Y_SUB-0.2,'auv',BLUE), P(0.4,0.3,Y_SUB+0.3,'auv',BLUE)
+  ];
+
+  // central hub — shared distributed policy, hovering at mid-height
+  const hub={x:0,y:0.55,z:0};
+
+  // connections: every agent <-> hub (spoke) + agent-to-agent across layers (mesh)
+  const links=[];
+  agents.forEach(a=>links.push({a:hub,b:a,spoke:true,col:a.col}));
+  // cross-layer mesh: connect each agent to the 2 nearest others (incl. different domains)
+  for(let i=0;i<agents.length;i++){
+    const d=agents.map((b,j)=>({j,dist:j===i?1e9:Math.hypot(agents[i].x-b.x,agents[i].y-b.y,agents[i].z-b.z)}))
+                  .sort((p,q)=>p.dist-q.dist);
+    for(let k=0;k<2;k++){
+      const j=d[k].j;
+      if(j>i) links.push({a:agents[i],b:agents[j],spoke:false});
+    }
+  }
+  // a couple of explicit long cross-domain links (drone <-> auv, car <-> usv) for "spanning space"
+  links.push({a:agents[0],b:agents[8],spoke:false,strong:true});  // drone↔auv
+  links.push({a:agents[4],b:agents[6],spoke:false,strong:true});  // car↔usv
+
+  const peerLinks=links.filter(l=>!l.spoke);
+  const msgs=[];
+  for(let i=0;i<9;i++) msgs.push({l:peerLinks[(Math.random()*peerLinks.length)|0],p:Math.random(),spd:0.005+Math.random()*0.008});
+  const spokeLinks=links.filter(l=>l.spoke);
+  const packets=spokeLinks.map(l=>({l,p:Math.random(),spd:0.004+Math.random()*0.006}));
+
+  // ---- projection (rotating) ----
+  let yaw=0; const FOV=2.7, CAMz=6.4, tilt=0.46;
+  function proj(p){
+    const c=Math.cos(yaw),s=Math.sin(yaw);
+    let X=p.x*c - p.z*s, Z=p.x*s + p.z*c, Y=p.y;
+    const cy=Math.cos(tilt),sy=Math.sin(tilt);
+    const Y2=Y*cy - Z*sy, Z2=Y*sy + Z*cy;
+    const zc=Z2+CAMz;
+    const sc=(FOV/zc)*Math.min(W,H)*0.34;
+    return {x:W/2+X*sc, y:H/2-Y2*sc, s:sc, d:zc};
+  }
+  function lerp3(a,b,t){return {x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,z:a.z+(b.z-a.z)*t};}
+
+  // ---- environment planes ----
+  function drawPlane(y,col,op,fill){
+    // grid on the (x,z) plane at altitude y
+    ctx.strokeStyle='rgba('+col+','+op+')';ctx.lineWidth=1*dpr;
+    const step=SPAN/3;
+    for(let gx=-SPAN;gx<=SPAN+0.01;gx+=step){
+      ctx.beginPath();
+      for(let gz=-SPAN;gz<=SPAN+0.01;gz+=step/3){const q=proj({x:gx,y,z:gz});(gz===-SPAN)?ctx.moveTo(q.x,q.y):ctx.lineTo(q.x,q.y);}
+      ctx.stroke();
+    }
+    for(let gz=-SPAN;gz<=SPAN+0.01;gz+=step){
+      ctx.beginPath();
+      for(let gx=-SPAN;gx<=SPAN+0.01;gx+=step/3){const q=proj({x:gx,y,z:gz});(gx===-SPAN)?ctx.moveTo(q.x,q.y):ctx.lineTo(q.x,q.y);}
+      ctx.stroke();
+    }
+  }
+
+  function drawIcon(a,P){
+    const r=P.s*0.15;const x=P.x,y=P.y;
+    ctx.lineWidth=Math.max(1,1.3*dpr*(P.s/120));
+    ctx.strokeStyle='rgba('+a.col+',0.95)';ctx.fillStyle='rgba('+a.col+',0.2)';
+    if(a.type==='drone'){
+      ctx.beginPath();ctx.moveTo(x-r,y-r);ctx.lineTo(x+r,y+r);ctx.moveTo(x+r,y-r);ctx.lineTo(x-r,y+r);ctx.stroke();
+      [[-r,-r],[r,-r],[-r,r],[r,r]].forEach(p=>{ctx.beginPath();ctx.arc(x+p[0],y+p[1],r*0.4,0,7);ctx.stroke();});
+      ctx.beginPath();ctx.rect(x-r*0.3,y-r*0.3,r*0.6,r*0.6);ctx.fill();ctx.stroke();
+    }else if(a.type==='car'){
+      ctx.beginPath();ctx.moveTo(x-r,y+r*0.4);ctx.lineTo(x-r*0.7,y-r*0.2);ctx.lineTo(x-r*0.2,y-r*0.2);
+      ctx.lineTo(x+r*0.1,y-r*0.7);ctx.lineTo(x+r*0.7,y-r*0.7);ctx.lineTo(x+r*0.9,y-r*0.2);ctx.lineTo(x+r,y-r*0.2);ctx.lineTo(x+r,y+r*0.4);ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.arc(x-r*0.55,y+r*0.5,r*0.24,0,7);ctx.stroke();ctx.beginPath();ctx.arc(x+r*0.55,y+r*0.5,r*0.24,0,7);ctx.stroke();
+    }else if(a.type==='usv'){
+      ctx.beginPath();ctx.moveTo(x-r,y-r*0.1);ctx.lineTo(x+r,y-r*0.1);ctx.lineTo(x+r*0.6,y+r*0.6);ctx.lineTo(x-r*0.7,y+r*0.6);ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.moveTo(x,y-r*0.1);ctx.lineTo(x,y-r*0.9);ctx.stroke();ctx.beginPath();ctx.arc(x,y-r,r*0.15,0,7);ctx.fillStyle='rgba('+a.col+',0.9)';ctx.fill();
+    }else{
+      ctx.beginPath();ctx.ellipse(x,y,r,r*0.4,0,0,7);ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.moveTo(x-r*0.9,y-r*0.28);ctx.lineTo(x-r*1.2,y-r*0.5);ctx.moveTo(x-r*0.9,y+r*0.28);ctx.lineTo(x-r*1.2,y+r*0.5);ctx.stroke();
+      ctx.beginPath();ctx.arc(x+r*0.7,y,r*0.12,0,7);ctx.stroke();
+    }
+    // vertical drop line to the surface plane (anchors it in 3D space)
+    const foot=proj({x:a.x,y:Y_SURF,z:a.z});
+    ctx.strokeStyle='rgba('+a.col+',0.15)';ctx.lineWidth=1*dpr;
+    ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(foot.x,foot.y);ctx.stroke();
+  }
+
+  let t=0;
+  function frame(){
+    if(!W)resize();
+    ctx.clearRect(0,0,W,H);
+    t+=1; yaw+=0.0034;
+    agents.forEach(a=>{a._y=a.y+Math.sin(t*0.02+a.ph)*0.05;});
+
+    // planes: water surface (prominent), subsea floor, sky ceiling (faint)
+    drawPlane(Y_SUB-0.1, BLUE, 0.10);     // seabed
+    drawPlane(Y_SURF, G, 0.16);           // water surface
+    drawPlane(Y_AIR+0.3, SKY, 0.06);      // sky ceiling
+
+    // links
+    links.forEach(l=>{
+      const a={x:l.a.x,y:(l.a._y!=null?l.a._y:l.a.y),z:l.a.z};
+      const b={x:l.b.x,y:(l.b._y!=null?l.b._y:l.b.y),z:l.b.z};
+      const PA=proj(a),PB=proj(b);
+      const o=l.spoke?0.12:(l.strong?0.30:0.14);
+      ctx.strokeStyle='rgba('+G+','+o+')';ctx.lineWidth=(l.strong?1.4:0.9)*dpr;
+      ctx.beginPath();ctx.moveTo(PA.x,PA.y);ctx.lineTo(PB.x,PB.y);ctx.stroke();
+    });
+
+    // peer messages
+    msgs.forEach(m=>{m.p+=m.spd;if(m.p>=1){m.p=0;m.l=peerLinks[(Math.random()*peerLinks.length)|0];}
+      const q=proj(lerp3(m.l.a,m.l.b,m.p));const gl=Math.sin(m.p*Math.PI);
+      ctx.fillStyle='rgba('+G+','+(0.3+gl*0.6)+')';ctx.beginPath();ctx.arc(q.x,q.y,(1.6+gl*1.5)*dpr*(q.s/120),0,7);ctx.fill();});
+    // spoke packets
+    packets.forEach(pk=>{pk.p+=pk.spd;if(pk.p>=1)pk.p=0;
+      const f=pk.p<0.5?pk.p*2:(1-pk.p)*2;
+      const q=proj(lerp3(hub,pk.l.b,f));
+      ctx.fillStyle='rgba('+pk.l.col+',0.85)';ctx.beginPath();ctx.arc(q.x,q.y,1.6*dpr*(q.s/120),0,7);ctx.fill();});
+
+    // hub — neural-network "brain" (policy), drawn crisp in screen-space at hub position
+    const PH=proj(hub);
+    const R=PH.s*0.30;                       // brain half-size, scales with perspective
+    // soft halo
+    const gr=ctx.createRadialGradient(PH.x,PH.y,0,PH.x,PH.y,R*1.9);
+    gr.addColorStop(0,'rgba('+G+',0.30)');gr.addColorStop(1,'rgba('+G+',0)');
+    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(PH.x,PH.y,R*1.9,0,7);ctx.fill();
+    // enclosing capsule
+    ctx.strokeStyle='rgba('+G+',0.45)';ctx.lineWidth=1.3*dpr;
+    ctx.beginPath();ctx.ellipse(PH.x,PH.y,R*1.25,R*0.95,0,0,7);ctx.stroke();
+    // mini network: 4 layers
+    const NSHAPE=[2,3,3,2];
+    const bx0=PH.x-R*0.85, bx1=PH.x+R*0.85, by0=PH.y-R*0.55, by1=PH.y+R*0.55;
+    const bcols=[];
+    for(let li=0;li<NSHAPE.length;li++){
+      const bxx=bx0+(bx1-bx0)*(li/(NSHAPE.length-1));const col=[];
+      for(let ni=0;ni<NSHAPE[li];ni++)col.push({x:bxx,y:by0+(by1-by0)*((ni+0.5)/NSHAPE[li])});
+      bcols.push(col);
+    }
+    // connections, with a left→right activation wave
+    const bwave=(t*0.05)%(NSHAPE.length+1);
+    for(let li=0;li<bcols.length-1;li++){
+      const lit=Math.abs(li-(bwave-1))<0.9;
+      ctx.strokeStyle='rgba('+G+','+(lit?0.55:0.18)+')';
+      ctx.lineWidth=(lit?1.2:0.7)*dpr;
+      for(const a of bcols[li])for(const b of bcols[li+1]){
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+      }
+    }
+    // neurons
+    let bi=0;
+    bcols.forEach(col=>col.forEach(nd=>{
+      const act=0.5+0.5*Math.sin(t*0.08+bi*0.8);bi++;
+      ctx.fillStyle='rgba('+G+','+(0.4+act*0.5)+')';
+      ctx.beginPath();ctx.arc(nd.x,nd.y,Math.max(1.6,R*0.085),0,7);ctx.fill();
+      ctx.strokeStyle='rgba('+G+',0.5)';ctx.lineWidth=1*dpr;
+      ctx.beginPath();ctx.arc(nd.x,nd.y,Math.max(2.6,R*0.13),0,7);ctx.stroke();
+    }));
+
+    // agents depth-sorted
+    agents.map(a=>({a,P:proj({x:a.x,y:a._y,z:a.z})})).sort((u,v)=>v.P.d-u.P.d)
+      .forEach(o=>{ctx.globalAlpha=Math.max(0.45,Math.min(1,1.5-o.P.d/10));drawIcon(o.a,o.P);ctx.globalAlpha=1;});
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,200);});
+})();
+</script>
+<!-- GoatCounter analytics -->
+<script data-goatcounter="https://dibyendughosh.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
